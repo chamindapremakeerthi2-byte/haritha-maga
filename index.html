@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARITHA MAGA</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f7f0;color:#24382a}
+header{background:#176b3a;color:white;padding:22px 18px;border-radius:0 0 22px 22px}
+header h1{margin:0;font-size:25px}
+header p{margin:8px 0 0;font-size:14px}
+nav{display:flex;gap:8px;padding:12px;overflow:auto;background:white}
+nav button{white-space:nowrap;border:0;background:#e5f2e5;padding:12px;border-radius:10px;color:#205b34}
+button{cursor:pointer}
+main{padding:14px;max-width:650px;margin:auto}
+.card{background:white;border-radius:15px;padding:16px;margin-bottom:13px;box-shadow:0 2px 8px #00000008}
+h2{font-size:19px;margin-top:0}
+input,select,textarea{width:100%;padding:12px;margin:7px 0;border:1px solid #d6e2d6;border-radius:10px;font-size:15px}
+.btn{width:100%;padding:13px;background:#218044;color:white;border:0;border-radius:10px;font-weight:bold;margin-top:8px}
+.secondary{background:#e7f4e7;color:#21663a}
+.price{font-size:20px;font-weight:bold;color:#16803e}
+.tag{display:inline-block;background:#e5f4e5;color:#25733e;padding:5px 9px;border-radius:20px;font-size:12px}
+.item{border:1px solid #e4ece3;padding:13px;border-radius:12px;margin:10px 0}
+.item img{width:100%;max-height:210px;object-fit:cover;border-radius:10px}
+.small{font-size:13px;color:#718071}
+.hidden{display:none}
+footer{text-align:center;color:#819082;font-size:12px;padding:20px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🌱 HARITHA MAGA</h1>
+<p>ගොවියාගේ අස්වැන්නට සෘජු වෙළඳපොළක්</p>
+<p>🌾 ගොවියාට හොඳ මිලක් · 🛒 ගැනුම්කරුට නැවුම් අස්වැන්නක්</p>
+</header>
+
+<nav>
+<button onclick="showPage('home')">🏠 මුල් පිටුව</button>
+<button onclick="showPage('sell')">🌾 විකුණන්න</button>
+<button onclick="showPage('market')">🛒 වෙළඳපොළ</button>
+<button onclick="showPage('transport')">🚚 ප්‍රවාහනය</button>
+</nav>
+
+<main>
+
+<!-- HOME -->
+<section id="home">
+<div class="card">
+<h2>ආයුබෝවන්! 👋</h2>
+<p>HARITHA MAGA වෙත සාදරයෙන් පිළිගනිමු.</p>
+<p>ගොවියාගේ අස්වැන්න ගැනුම්කරුවන්ට සෘජුවම සම්බන්ධ කරන වෙළඳපොළ.</p>
+<button class="btn" onclick="showPage('sell')">🌾 අස්වැන්න විකුණන්න</button>
+<button class="btn secondary" onclick="showPage('market')">🛒 අස්වැන්න මිලදී ගන්න</button>
+<button class="btn secondary" onclick="showPage('transport')">🚚 ප්‍රවාහනය සොයන්න</button>
+</div>
+
+<div class="card">
+<h2>🌿 අපේ අරමුණ</h2>
+<p>ගොවියා සහ ගැනුම්කරු අතර සෘජු සම්බන්ධතාවයක් ඇති කර අතරමැදියන් අඩු කර, ගොවියාට සාධාරණ මිලක් ලබාගැනීමට උදව් කිරීම.</p>
+</div>
+</section>
+
+<!-- SELL -->
+<section id="sell" class="hidden">
+<div class="card">
+<h2>🌾 අස්වැන්න විකුණන්න</h2>
+
+<input id="farmer" placeholder="ගොවියාගේ නම">
+<input id="phone" placeholder="දුරකථන අංකය" type="tel">
+
+<select id="vegetable">
+<option value="">අස්වැන්න තෝරන්න</option>
+<option>කැරට්</option>
+<option>අර්තාපල්</option>
+<option>ගෝවා</option>
+<option>තක්කාලි</option>
+<option>ලීක්ස්</option>
+<option>බෝංචි</option>
+<option>බීට්</option>
+<option>වට්ටක්කා</option>
+<option>වම්බටු</option>
+<option>මිරිස්</option>
+<option>වෙනත්</option>
+</select>
+
+<input id="quantity" type="number" placeholder="ප්‍රමාණය (කිලෝග්‍රෑම්)">
+<input id="price" type="number" placeholder="කිලෝවක මිල (රු.)">
+<input id="location" placeholder="ගම / ප්‍රදේශය">
+<input id="photo" placeholder="අස්වැන්නේ Photo URL (තිබේ නම්)">
+<input id="available" type="date">
+
+<button class="btn" onclick="addProduct()">📤 දැන්වීම පළ කරන්න</button>
+</div>
+</section>
+
+<!-- MARKET -->
+<section id="market" class="hidden">
+<div class="card">
+<h2>🛒 අස්වැන්න වෙළඳපොළ</h2>
+<input id="search" placeholder="🔎 එළවළු හෝ ප්‍රදේශය සොයන්න" oninput="renderProducts()">
+</div>
+<div id="products"></div>
+</section>
+
+<!-- TRANSPORT -->
+<section id="transport" class="hidden">
+<div class="card">
+<h2>🚚 ප්‍රවාහන සේවාවක් ඉල්ලන්න</h2>
+<input id="from" placeholder="රැගෙන යන ස්ථානය">
+<input id="to" placeholder="ගෙනයන ස්ථානය">
+<input id="weight" type="number" placeholder="අස්වැන්නේ බර (kg)">
+<input id="transportPhone" type="tel" placeholder="ඔබගේ දුරකථන අංකය">
+<button class="btn" onclick="sendTransport()">ප්‍රවාහන ඉල්ලීම සකස් කරන්න</button>
+<div id="transportResult"></div>
+</div>
+
+<div class="card">
+<h2>🚛 ප්‍රවාහකයන්ට</h2>
+<p>ඔබට ලොරියක් හෝ ප්‍රවාහන සේවයක් තිබේ නම් ගොවීන්ගේ අස්වැන්න ප්‍රවාහනයට සම්බන්ධ විය හැක.</p>
+<p class="small">ප්‍රවාහක ලියාපදිංචිය ඉදිරි සංස්කරණයකදී එකතු කෙරේ.</p>
+</div>
+</section>
+
+</main>
+
+<footer>HARITHA MAGA 🌱 · ගොවියාගේ ශක්තිය</footer>
+
+<script>
+function showPage(page){
+["home","sell","market","transport"].forEach(id=>{
+document.getElementById(id).classList.add("hidden");
+});
+document.getElementById(page).classList.remove("hidden");
+if(page==="market")renderProducts();
+}
+
+function getProducts(){
+return JSON.parse(localStorage.getItem("harithaProducts")||"[]");
+}
+
+function saveProducts(list){
+localStorage.setItem("harithaProducts",JSON.stringify(list));
+}
+
+function addProduct(){
+let farmer=document.getElementById("farmer").value.trim();
+let phone=document.getElementById("phone").value.trim();
+let veg=document.getElementById("vegetable").value;
+let qty=document.getElementById("quantity").value;
+let price=document.getElementById("price").value;
+let loc=document.getElementById("location").value.trim();
+let photo=document.getElementById("photo").value.trim();
+let available=document.getElementById("available").value;
+
+if(!farmer||!phone||!veg||!qty||!price||!loc){
+alert("කරුණාකර අවශ්‍ය සියලු තොරතුරු ඇතුළත් කරන්න.");
+return;
+}
+
+let item={
+id:Date.now(),
+farmer,phone,veg,qty,price,loc,photo,available
+};
+
+let list=getProducts();
+list.unshift(item);
+saveProducts(list);
+
+alert("✅ ඔබගේ අස්වැන්න දැන්වීම සුරැකුණා!");
+document.getElementById("farmer").value="";
+document.getElementById("phone").value="";
+document.getElementById("vegetable").value="";
+document.getElementById("quantity").value="";
+document.getElementById("price").value="";
+document.getElementById("location").value="";
+document.getElementById("photo").value="";
+document.getElementById("available").value="";
+showPage("market");
+}
+
+function renderProducts(){
+let list=getProducts();
+let search=(document.getElementById("search")?.value||"").toLowerCase();
+let container=document.getElementById("products");
+
+list=list.filter(p=>
+(p.veg+" "+p.loc+" "+p.farmer).toLowerCase().includes(search)
+);
+
+if(list.length===0){
+container.innerHTML='<div class="card">දැනට දැන්වීම් නැහැ. අලුත් අස්වැන්නක් පළ කරන්න 🌱</div>';
+return;
+}
+
+container.innerHTML=list.map(p=>`
+<div class="item card">
+${p.photo?`<img src="${p.photo}" alt="${p.veg}">`:""}
+<span class="tag">🌱 නැවුම් අස්වැන්න</span>
+<h2>${p.veg}</h2>
+<div class="price">රු. ${p.price} / kg</div>
+<p>⚖️ ප්‍රමාණය: ${p.qty} kg</p>
+<p>📍 ${p.loc}</p>
+<p>👨‍🌾 ${p.farmer}</p>
+<p>📅 ලබාගත හැකි දිනය: ${p.available||"දැන්"}</p>
+<a href="tel:${p.phone}">
+<button class="btn">📞 ගොවියාට කතා කරන්න</button>
+</a>
+<button class="btn secondary" onclick="deleteProduct(${p.id})">🗑️ දැන්වීම ඉවත් කරන්න</button>
+</div>
+`).join("");
+}
+
+function deleteProduct(id){
+if(!confirm("මෙම දැන්වීම ඉවත් කරන්නද?"))return;
+saveProducts(getProducts().filter(p=>p.id!==id));
+renderProducts();
+}
+
+function sendTransport(){
+let from=document.getElementById("from").value.trim();
+let to=document.getElementById("to").value.trim();
+let weight=document.getElementById("weight").value;
+let phone=document.getElementById("transportPhone").value.trim();
+
+if(!from||!to||!weight||!phone){
+alert("කරුණාකර සියලු තොරතුරු ඇතුළත් කරන්න.");
+return;
+}
+
+document.getElementById("transportResult").innerHTML=`
+<div class="item">
+<h3>🚚 ප්‍රවාහන ඉල්ලීම සකස් කළා</h3>
+<p>📍 ${from} සිට ${to} දක්වා</p>
+<p>⚖️ ${weight} kg</p>
+<p>📞 ${phone}</p>
+<p class="small">මෙය Demo එකක් පමණයි. ඉල්ලීම ප්‍රවාහකයෙකුට Online යවා නැත.</p>
+</div>`;
+}
+</script>
+</body>
+</html>
