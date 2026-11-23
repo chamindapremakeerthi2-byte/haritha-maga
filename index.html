@@ -97,6 +97,11 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <div class="card">
 <h2>🛒 අස්වැන්න වෙළඳපොළ</h2>
 <input id="search" placeholder="🔎 එළවළු හෝ ප්‍රදේශය සොයන්න" oninput="renderProducts()">
+  <select id="sortPrice" onchange="renderProducts()">
+<option value="newest">අලුත්ම දැන්වීම් මුලින්</option>
+<option value="low">අඩුම මිල මුලින්</option>
+<option value="high">වැඩිම මිල මුලින්</option>
+</select>
 </div>
 <div id="products"></div>
 </section>
