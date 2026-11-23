@@ -275,11 +275,14 @@ if(newPrice === null) return;
 
 const newQty = prompt("අලුත් ප්‍රමාණය (kg) ඇතුළත් කරන්න:");
 if(newQty === null) return;
+const newPhone = prompt("අලුත් දුරකථන අංකය ඇතුළත් කරන්න:");
+if(newPhone === null) return;
 
 try{
 await updateDoc(doc(db,"products",id),{
 price:Number(newPrice),
-qty:Number(newQty)
+qty:Number(newQty),
+phone:newPhone
 });
 alert("දැන්වීම යාවත්කාලීන කළා!");
 renderProducts();
