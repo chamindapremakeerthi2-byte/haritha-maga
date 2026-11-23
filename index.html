@@ -272,6 +272,14 @@ alert("දැන්වීම ඉවත් කිරීමට නොහැකි 
 window.editProduct = async function(id){
 const newPrice = prompt("අලුත් මිල (රු./kg) ඇතුළත් කරන්න:");
 if(newPrice === null) return;
+const newFarmer = prompt("අලුත් ගොවියාගේ නම ඇතුළත් කරන්න:");
+if(newFarmer === null) return;
+const newVeg = prompt("අලුත් එළවළු වර්ගය ඇතුළත් කරන්න:");
+if(newVeg === null) return;
+ const newLoc = prompt("අලුත් ප්‍රදේශය ඇතුළත් කරන්න:");
+if(newLoc === null) return;
+const newPhoto = prompt("අලුත් ඡායාරූප URL එක ඇතුළත් කරන්න:");
+if(newPhoto === null) return;
 
 const newQty = prompt("අලුත් ප්‍රමාණය (kg) ඇතුළත් කරන්න:");
 if(newQty === null) return;
@@ -282,7 +290,11 @@ try{
 await updateDoc(doc(db,"products",id),{
 price:Number(newPrice),
 qty:Number(newQty),
-phone:newPhone
+phone:newPhone,
+farmer:newFarmer,
+veg:newVeg,
+loc:newLoc,
+photo:newPhoto
 });
 alert("දැන්වීම යාවත්කාලීන කළා!");
 renderProducts();
