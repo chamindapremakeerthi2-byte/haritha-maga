@@ -29,7 +29,6 @@ input,select,textarea{width:100%;padding:12px;margin:7px 0;border:1px solid #d6e
 footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -47,7 +46,6 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 
 <main>
 
-<!-- HOME -->
 <section id="home">
 <div class="card">
 <h2>ආයුබෝවන්! 👋</h2>
@@ -64,11 +62,9 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 </section>
 
-<!-- SELL -->
 <section id="sell" class="hidden">
 <div class="card">
 <h2>🌾 අස්වැන්න විකුණන්න</h2>
-
 <input id="farmer" placeholder="ගොවියාගේ නම">
 <input id="phone" placeholder="දුරකථන අංකය" type="tel">
 
@@ -97,7 +93,6 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 </section>
 
-<!-- MARKET -->
 <section id="market" class="hidden">
 <div class="card">
 <h2>🛒 අස්වැන්න වෙළඳපොළ</h2>
@@ -106,7 +101,6 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <div id="products"></div>
 </section>
 
-<!-- TRANSPORT -->
 <section id="transport" class="hidden">
 <div class="card">
 <h2>🚚 ප්‍රවාහන සේවාවක් ඉල්ලන්න</h2>
@@ -126,27 +120,45 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </section>
 
 </main>
-
 <footer>HARITHA MAGA 🌱 · ගොවියාගේ ශක්තිය</footer>
 
-<script>
-function showPage(page){
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyAuz4oqBkwHf2qJ_93hGN9UyLcxSQZO71I",
+authDomain: "haritha-maga.firebaseapp.com",
+projectId: "haritha-maga",
+storageBucket: "haritha-maga.firebasestorage.app",
+messagingSenderId: "905401030287",
+appId: "1:905401030287:web:3eb62aacec81becb60c2fa",
+measurementId: "G-B1T94LD7QV"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const productsRef = collection(db,"products");
+
+window.showPage = function(page){
 ["home","sell","market","transport"].forEach(id=>{
 document.getElementById(id).classList.add("hidden");
 });
 document.getElementById(page).classList.remove("hidden");
 if(page==="market")renderProducts();
-}
+};
 
-function getProducts(){
-return JSON.parse(localStorage.getItem("harithaProducts")||"[]");
-}
+window.addProduct = async function(){
 
-function saveProducts(list){
-localStorage.setItem("harithaProducts",JSON.stringify(list));
-}
-
-function addProduct(){
 let farmer=document.getElementById("farmer").value.trim();
 let phone=document.getElementById("phone").value.trim();
 let veg=document.getElementById("vegetable").value;
@@ -161,35 +173,49 @@ alert("කරුණාකර අවශ්‍ය සියලු තොරතු�
 return;
 }
 
-let item={
-id:Date.now(),
-farmer,phone,veg,qty,price,loc,photo,available
+try{
+await addDoc(productsRef,{
+farmer,
+phone,
+veg,
+qty:Number(qty),
+price:Number(price),
+loc,
+photo,
+available,
+createdAt:Date.now()
+});
+
+alert("✅ දැන්වීම Firebase එකේ සාර්ථකව සුරැකුණා!");
+
+["farmer","phone","vegetable","quantity","price","location","photo","available"].forEach(id=>{
+document.getElementById(id).value="";
+});
+
+showPage("market");
+
+}catch(error){
+console.error(error);
+alert("❌ දැන්වීම සුරැකීමට නොහැකි වුණා. Firebase Rules පරීක්ෂා කරන්න.");
+}
 };
 
-let list=getProducts();
-list.unshift(item);
-saveProducts(list);
+window.renderProducts = async function(){
 
-alert("✅ ඔබගේ අස්වැන්න දැන්වීම සුරැකුණා!");
-document.getElementById("farmer").value="";
-document.getElementById("phone").value="";
-document.getElementById("vegetable").value="";
-document.getElementById("quantity").value="";
-document.getElementById("price").value="";
-document.getElementById("location").value="";
-document.getElementById("photo").value="";
-document.getElementById("available").value="";
-showPage("market");
-}
-
-function renderProducts(){
-let list=getProducts();
-let search=(document.getElementById("search")?.value||"").toLowerCase();
 let container=document.getElementById("products");
+container.innerHTML='<div class="card">⏳ දැන්වීම් ලබාගනිමින්...</div>';
+
+try{
+const snapshot=await getDocs(productsRef);
+let list=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+
+let search=(document.getElementById("search")?.value||"").toLowerCase();
 
 list=list.filter(p=>
-(p.veg+" "+p.loc+" "+p.farmer).toLowerCase().includes(search)
+((p.veg||"")+" "+(p.loc||"")+" "+(p.farmer||"")).toLowerCase().includes(search)
 );
+
+list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
 
 if(list.length===0){
 container.innerHTML='<div class="card">දැනට දැන්වීම් නැහැ. අලුත් අස්වැන්නක් පළ කරන්න 🌱</div>';
@@ -198,29 +224,38 @@ return;
 
 container.innerHTML=list.map(p=>`
 <div class="item card">
-${p.photo?`<img src="${p.photo}" alt="${p.veg}">`:""}
+${p.photo?`<img src="${p.photo}" alt="අස්වැන්න">`:""}
 <span class="tag">🌱 නැවුම් අස්වැන්න</span>
-<h2>${p.veg}</h2>
-<div class="price">රු. ${p.price} / kg</div>
-<p>⚖️ ප්‍රමාණය: ${p.qty} kg</p>
-<p>📍 ${p.loc}</p>
-<p>👨‍🌾 ${p.farmer}</p>
+<h2>${p.veg||""}</h2>
+<div class="price">රු. ${p.price||0} / kg</div>
+<p>⚖️ ප්‍රමාණය: ${p.qty||0} kg</p>
+<p>📍 ${p.loc||""}</p>
+<p>👨‍🌾 ${p.farmer||""}</p>
 <p>📅 ලබාගත හැකි දිනය: ${p.available||"දැන්"}</p>
-<a href="tel:${p.phone}">
+<a href="tel:${p.phone||""}">
 <button class="btn">📞 ගොවියාට කතා කරන්න</button>
 </a>
-<button class="btn secondary" onclick="deleteProduct(${p.id})">🗑️ දැන්වීම ඉවත් කරන්න</button>
+<button class="btn secondary" onclick="deleteProduct('${p.id}')">🗑️ දැන්වීම ඉවත් කරන්න</button>
 </div>
 `).join("");
-}
 
-function deleteProduct(id){
+}catch(error){
+console.error(error);
+container.innerHTML='<div class="card">❌ දැන්වීම් ලබාගැනීමට නොහැකි වුණා. Firebase පරීක්ෂා කරන්න.</div>';
+}
+};
+
+window.deleteProduct = async function(id){
 if(!confirm("මෙම දැන්වීම ඉවත් කරන්නද?"))return;
-saveProducts(getProducts().filter(p=>p.id!==id));
+try{
+await deleteDoc(doc(db,"products",id));
 renderProducts();
+}catch(error){
+alert("දැන්වීම ඉවත් කිරීමට නොහැකි වුණා.");
 }
+};
 
-function sendTransport(){
+window.sendTransport = function(){
 let from=document.getElementById("from").value.trim();
 let to=document.getElementById("to").value.trim();
 let weight=document.getElementById("weight").value;
@@ -239,7 +274,8 @@ document.getElementById("transportResult").innerHTML=`
 <p>📞 ${phone}</p>
 <p class="small">මෙය Demo එකක් පමණයි. ඉල්ලීම ප්‍රවාහකයෙකුට Online යවා නැත.</p>
 </div>`;
-}
+};
+
 </script>
 </body>
 </html>
