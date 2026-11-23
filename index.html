@@ -86,7 +86,7 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <input id="quantity" type="number" placeholder="ප්‍රමාණය (කිලෝග්‍රෑම්)">
 <input id="price" type="number" placeholder="කිලෝවක මිල (රු.)">
 <input id="location" placeholder="ගම / ප්‍රදේශය">
-<input id="photo" placeholder="අස්වැන්නේ Photo URL (තිබේ නම්)">
+<input id="photo" type="file" accept="image/*">
 <input id="available" type="date">
 
 <button class="btn" onclick="addProduct()">📤 දැන්වීම පළ කරන්න</button>
@@ -171,7 +171,7 @@ let veg=document.getElementById("vegetable").value;
 let qty=document.getElementById("quantity").value;
 let price=document.getElementById("price").value;
 let loc=document.getElementById("location").value.trim();
-let photo=document.getElementById("photo").value.trim();
+let photo=document.getElementById("photo").files[0];
 let available=document.getElementById("available").value;
 
 if(!farmer||!phone||!veg||!qty||!price||!loc){
