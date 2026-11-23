@@ -220,7 +220,15 @@ list=list.filter(p=>
 ((p.veg||"")+" "+(p.loc||"")+" "+(p.farmer||"")).toLowerCase().includes(search)
 );
 
+let sort=document.getElementById("sortPrice").value;
+
+if(sort==="low"){
+list.sort((a,b)=>(a.price||0)-(b.price||0));
+}else if(sort==="high"){
+list.sort((a,b)=>(b.price||0)-(a.price||0));
+}else{
 list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+}
 
 if(list.length===0){
 container.innerHTML='<div class="card">දැනට දැන්වීම් නැහැ. අලුත් අස්වැන්නක් පළ කරන්න 🌱</div>';
