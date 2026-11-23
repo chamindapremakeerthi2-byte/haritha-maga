@@ -137,7 +137,8 @@ collection,
 addDoc,
 getDocs,
 deleteDoc,
-doc
+doc,
+updateDoc
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -248,6 +249,7 @@ ${p.photo?`<img src="${p.photo}" alt="අස්වැන්න">`:""}
 <a href="tel:${p.phone||""}">
 <button class="btn">📞 ගොවියාට කතා කරන්න</button>
 </a>
+<button class="btn" onclick="editProduct('${p.id}')">✏️ දැන්වීම සංස්කරණය කරන්න</button>
 <button class="btn secondary" onclick="deleteProduct('${p.id}')">🗑️ දැන්වීම ඉවත් කරන්න</button>
 </div>
 `).join("");
@@ -265,6 +267,24 @@ await deleteDoc(doc(db,"products",id));
 renderProducts();
 }catch(error){
 alert("දැන්වීම ඉවත් කිරීමට නොහැකි වුණා.");
+}
+};
+window.editProduct = async function(id){
+const newPrice = prompt("අලුත් මිල (රු./kg) ඇතුළත් කරන්න:");
+if(newPrice === null) return;
+
+const newQty = prompt("අලුත් ප්‍රමාණය (kg) ඇතුළත් කරන්න:");
+if(newQty === null) return;
+
+try{
+await updateDoc(doc(db,"products",id),{
+price:Number(newPrice),
+qty:Number(newQty)
+});
+alert("දැන්වීම යාවත්කාලීන කළා!");
+renderProducts();
+}catch(error){
+alert("වෙනස් කිරීමට නොහැකි වුණා.");
 }
 };
 
