@@ -284,6 +284,7 @@ let photoURL = await uploadPhoto(photo);
 
 await addDoc(productsRef,{
 farmer,
+ownerUid: auth.currentUser.uid,
 phone,
 veg,
 qty:Number(qty),
@@ -352,8 +353,10 @@ ${p.photo?`<img src="${p.photo}" alt="අස්වැන්න">`:""}
 <a href="tel:${p.phone||""}">
 <button class="btn">📞 ගොවියාට කතා කරන්න</button>
 </a>
+${auth.currentUser && p.ownerUid === auth.currentUser.uid ? `
 <button class="btn" onclick="editProduct('${p.id}')">✏️ දැන්වීම සංස්කරණය කරන්න</button>
 <button class="btn secondary" onclick="deleteProduct('${p.id}')">🗑️ දැන්වීම ඉවත් කරන්න</button>
+` : ""}
 </div>
 `).join("");
 
