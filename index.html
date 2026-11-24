@@ -128,7 +128,19 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <section id="account" class="hidden">
 <div class="card">
 <h2>👤 මගේ ගිණුම</h2>
-<p>HARITHA MAGA ගිණුමට සාදරයෙන් පිළිගනිමු.</p>
+
+<input id="email" type="email" placeholder="Email ලිපිනය">
+
+<input id="password" type="password" placeholder="මුරපදය">
+
+<button class="btn" onclick="registerUser()">📝 අලුත් ගිණුමක් හදන්න</button>
+
+<button class="btn secondary" onclick="loginUser()">🔐 Login වෙන්න</button>
+
+<button class="btn secondary" onclick="logoutUser()">🚪 Logout වෙන්න</button>
+
+<p id="authMessage"></p>
+
 </div>
 </section>
 
@@ -172,6 +184,51 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const productsRef = collection(db,"products");
 
+window.registerUser = async function(){
+
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value;
+
+try{
+await createUserWithEmailAndPassword(auth,email,password);
+document.getElementById("authMessage").innerText =
+"✅ ගිණුම සාර්ථකව හැදුවා!";
+}catch(error){
+document.getElementById("authMessage").innerText =
+"❌ " + error.message;
+}
+
+};
+
+window.loginUser = async function(){
+
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value;
+
+try{
+await signInWithEmailAndPassword(auth,email,password);
+document.getElementById("authMessage").innerText =
+"✅ සාර්ථකව Login වුණා!";
+}catch(error){
+document.getElementById("authMessage").innerText =
+"❌ " + error.message;
+}
+
+};
+
+window.logoutUser = async function(){
+
+try{
+await signOut(auth);
+document.getElementById("authMessage").innerText =
+"ඔබ Logout වුණා.";
+}catch(error){
+document.getElementById("authMessage").innerText =
+"❌ " + error.message;
+}
+
+};
+  
 window.showPage = function(page){
 ["home","sell","market","transport","account"].forEach(id=>{
 document.getElementById(id).classList.add("hidden");
