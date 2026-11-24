@@ -156,6 +156,7 @@ getFirestore,
 collection,
 addDoc,
 getDocs,
+getDoc,
 deleteDoc,
 doc,
 updateDoc
@@ -264,6 +265,12 @@ return data.secure_url;
 }
 window.addProduct = async function(){
 
+if(!auth.currentUser){
+alert("දැන්වීමක් පළ කිරීමට කරුණාකර Login වෙන්න.");
+showPage("account");
+return;
+}
+  
 let farmer=document.getElementById("farmer").value.trim();
 let phone=document.getElementById("phone").value.trim();
 let veg=document.getElementById("vegetable").value;
@@ -367,33 +374,74 @@ container.innerHTML='<div class="card">❌ දැන්වීම් ලබාග
 };
 
 window.deleteProduct = async function(id){
+
+if(!auth.currentUser){
+alert("කරුණාකර Login වෙන්න.");
+return;
+}
+
 if(!confirm("මෙම දැන්වීම ඉවත් කරන්නද?"))return;
+
 try{
-await deleteDoc(doc(db,"products",id));
+const productRef = doc(db,"products",id);
+const productSnap = await getDoc(productRef);
+
+if(!productSnap.exists()) return;
+
+if(productSnap.data().ownerUid !== auth.currentUser.uid){
+alert("මෙම දැන්වීම ඔබගේ එකක් නොවේ!");
+return;
+}
+
+await deleteDoc(productRef);
 renderProducts();
+
 }catch(error){
 alert("දැන්වීම ඉවත් කිරීමට නොහැකි වුණා.");
 }
+
 };
 window.editProduct = async function(id){
-const newPrice = prompt("අලුත් මිල (රු./kg) ඇතුළත් කරන්න:");
-if(newPrice === null) return;
-const newFarmer = prompt("අලුත් ගොවියාගේ නම ඇතුළත් කරන්න:");
-if(newFarmer === null) return;
-const newVeg = prompt("අලුත් එළවළු වර්ගය ඇතුළත් කරන්න:");
-if(newVeg === null) return;
- const newLoc = prompt("අලුත් ප්‍රදේශය ඇතුළත් කරන්න:");
-if(newLoc === null) return;
-const newPhoto = prompt("අලුත් ඡායාරූප URL එක ඇතුළත් කරන්න:");
-if(newPhoto === null) return;
 
-const newQty = prompt("අලුත් ප්‍රමාණය (kg) ඇතුළත් කරන්න:");
-if(newQty === null) return;
-const newPhone = prompt("අලුත් දුරකථන අංකය ඇතුළත් කරන්න:");
-if(newPhone === null) return;
+if(!auth.currentUser){
+alert("කරුණාකර Login වෙන්න.");
+return;
+}
 
 try{
-await updateDoc(doc(db,"products",id),{
+
+const productRef = doc(db,"products",id);
+const productSnap = await getDoc(productRef);
+
+if(!productSnap.exists()) return;
+
+if(productSnap.data().ownerUid !== auth.currentUser.uid){
+alert("මෙම දැන්වීම ඔබගේ එකක් නොවේ!");
+return;
+}
+
+const newPrice = prompt("අලුත් මිල (රු./kg) ඇතුළත් කරන්න:");
+if(newPrice === null) return;
+
+const newFarmer = prompt("අලුත් ගොවියාගේ නම:");
+if(newFarmer === null) return;
+
+const newVeg = prompt("අලුත් එළවළු වර්ගය:");
+if(newVeg === null) return;
+
+const newLoc = prompt("අලුත් ප්‍රදේශය:");
+if(newLoc === null) return;
+
+const newPhoto = prompt("අලුත් ඡායාරූප URL එක:");
+if(newPhoto === null) return;
+
+const newQty = prompt("අලුත් ප්‍රමාණය (kg):");
+if(newQty === null) return;
+
+const newPhone = prompt("අලුත් දුරකථන අංකය:");
+if(newPhone === null) return;
+
+await updateDoc(productRef,{
 price:Number(newPrice),
 qty:Number(newQty),
 phone:newPhone,
@@ -402,11 +450,14 @@ veg:newVeg,
 loc:newLoc,
 photo:newPhoto
 });
+
 alert("දැන්වීම යාවත්කාලීන කළා!");
 renderProducts();
+
 }catch(error){
 alert("වෙනස් කිරීමට නොහැකි වුණා.");
 }
+
 };
 
 window.sendTransport = function(){
