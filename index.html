@@ -229,10 +229,10 @@ document.getElementById(id).value="";
 showPage("market");
 
 }catch(error){
-console.error(error);
-alert("❌ දැන්වීම සුරැකීමට නොහැකි වුණා. Firebase Rules පරීක්ෂා කරන්න.");
+console.error("HARITHA MAGA Error:",error);
+alert("❌ දැන්වීම පළ කිරීමට නොහැකි වුණා.\n\n" + error.message);
 }
-};
+
 
 window.renderProducts = async function(){
 
