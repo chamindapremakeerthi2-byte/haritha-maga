@@ -42,6 +42,7 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <button onclick="showPage('sell')">🌾 විකුණන්න</button>
 <button onclick="showPage('market')">🛒 වෙළඳපොළ</button>
 <button onclick="showPage('transport')">🚚 ප්‍රවාහනය</button>
+<button onclick="showPage('account')">👤 මගේ ගිණුම</button>
 </nav>
 
 <main>
@@ -124,6 +125,13 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 </section>
 
+<section id="account" class="hidden">
+<div class="card">
+<h2>👤 මගේ ගිණුම</h2>
+<p>HARITHA MAGA ගිණුමට සාදරයෙන් පිළිගනිමු.</p>
+</div>
+</section>
+
 </main>
 <footer>HARITHA MAGA 🌱 · ගොවියාගේ ශක්තිය</footer>
 
@@ -141,6 +149,14 @@ doc,
 updateDoc
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+  
 const firebaseConfig = {
 apiKey: "AIzaSyAuz4oqBkwHf2qJ_93hGN9UyLcxSQZO71I",
 authDomain: "haritha-maga.firebaseapp.com",
@@ -153,10 +169,11 @@ measurementId: "G-B1T94LD7QV"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 const productsRef = collection(db,"products");
 
 window.showPage = function(page){
-["home","sell","market","transport"].forEach(id=>{
+["home","sell","market","transport","account"].forEach(id=>{
 document.getElementById(id).classList.add("hidden");
 });
 document.getElementById(page).classList.remove("hidden");
