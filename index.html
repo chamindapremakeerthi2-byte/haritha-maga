@@ -67,43 +67,69 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
   <h2>🥬 එළවළු වර්ග</h2>
   <p>ඔබට අවශ්‍ය එළවළු වර්ගය තෝරන්න.</p>
 
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
 
-    <div onclick="filterVegetable('ගෝවා')" style="background:#e8f4e8;padding:10px;border-radius:16px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cabbage.jpg" style="width:100%;height:100px;object-fit:cover;border-radius:10px">
-      <p>ගෝවා</p>
+    <div onclick="filterVegetable('කැරට්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/carrot" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">කැරට්</p>
     </div>
 
-    <div onclick="filterVegetable('බෝංචි')" style="background:#e8f4e8;padding:10px;border-radius:16px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Green_beans_picture.jpg" style="width:100%;height:100px;object-fit:cover;border-radius:10px">
-      <p>බෝංචි</p>
+    <div onclick="filterVegetable('අර්තාපල්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/potato" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">අර්තාපල්</p>
     </div>
 
-    <div onclick="filterVegetable('ලීක්ස්')" style="background:#e8f4e8;padding:10px;border-radius:16px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Leek_picture.jpg" style="width:100%;height:100px;object-fit:cover;border-radius:10px">
-      <p>ලීක්ස්</p>
+    <div onclick="filterVegetable('ගෝවා')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/cabbage" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">ගෝවා</p>
     </div>
 
-    <div onclick="filterVegetable('බීට්')" style="background:#e8f4e8;padding:10px;border-radius:16px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Beet_root_vegetable.jpg" style="width:100%;height:100px;object-fit:cover;border-radius:10px">
-      <p>බීට්</p>
+    <div onclick="filterVegetable('තක්කාලි')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/tomato" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">තක්කාලි</p>
+    </div>
+
+    <div onclick="filterVegetable('ලීක්ස්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/leek" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">ලීක්ස්</p>
+    </div>
+
+    <div onclick="filterVegetable('බෝංචි')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/greenbeans" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">බෝංචි</p>
+    </div>
+
+    <div onclick="filterVegetable('බීට්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/beetroot" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">බීට්</p>
+    </div>
+
+    <div onclick="filterVegetable('වට්ටක්කා')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/pumpkin" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">වට්ටක්කා</p>
+    </div>
+
+    <div onclick="filterVegetable('වම්බටු')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/eggplant" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">වම්බටු</p>
+    </div>
+
+    <div onclick="filterVegetable('මිරිස්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/chilipepper" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">මිරිස්</p>
+    </div>
+
+    <div onclick="filterVegetable('වෙනත්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
+      <img src="https://loremflickr.com/400/300/freshvegetables" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
+      <p style="font-size:20px;margin:14px 0 0">වෙනත්</p>
     </div>
 
   </div>
+
+  <button class="btn" onclick="document.getElementById('search').value='';showPage('market')">
+    🛒 සියලුම අස්වැන්න බලන්න
+  </button>
 </div>
-
-
-
-<div onclick="filterVegetable('')" style="background:#fff;border:1px solid #e2eee2;border-radius:14px;padding:12px;text-align:center;cursor:pointer">
-<div style="font-size:65px;padding:20px">🌱</div>
-<h3>🌱 වෙනත්</h3>
-</div>
-
-</div>
-
-<button class="btn" onclick="showPage('market')">🛒 සියලුම අස්වැන්න බලන්න</button>
-</div>
-</section>
 
 <section id="sell" class="hidden">
 <div class="card">
