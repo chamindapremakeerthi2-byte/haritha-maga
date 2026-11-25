@@ -246,11 +246,21 @@ document.getElementById("authMessage").innerText =
 };
   
 window.showPage = function(page){
+
 ["home","sell","market","transport","account"].forEach(id=>{
 document.getElementById(id).classList.add("hidden");
 });
+
 document.getElementById(page).classList.remove("hidden");
-if(page==="market")renderProducts();
+
+if(page==="market"){
+renderProducts();
+}
+
+if(page==="transport"){
+loadTransportRequests();
+}
+
 };
 
 async function uploadPhoto(file){
@@ -530,7 +540,50 @@ alert("❌ ප්‍රවාහන ඉල්ලීම සුරැකීමට 
 }
 
 };
+window.loadTransportRequests = async function(){
 
+const container = document.getElementById("transportRequestsList");
+
+container.innerHTML = "<p>⏳ ප්‍රවාහන ඉල්ලීම් ලබාගනිමින්...</p>";
+
+try{
+
+const snapshot = await getDocs(collection(db,"transportRequests"));
+
+if(snapshot.empty){
+container.innerHTML = "<p>දැනට ප්‍රවාහන ඉල්ලීම් නැහැ.</p>";
+return;
+}
+
+let list = snapshot.docs.map(doc => ({
+id: doc.id,
+...doc.data()
+}));
+
+list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+container.innerHTML = list.map(r => `
+<div class="item">
+<h3>🚚 ${r.veg || ""}</h3>
+<p>📍 ${r.from || ""} සිට ${r.to || ""}</p>
+<p>⚖️ බර: ${r.weight || 0} kg</p>
+<p>📅 දිනය: ${r.date || ""}</p>
+<p>📞 ${r.phone || ""}</p>
+<a href="tel:${r.phone || ""}">
+<button class="btn">📞 ඉල්ලීම කළ පුද්ගලයා අමතන්න</button>
+</a>
+</div>
+`).join("");
+
+}catch(error){
+
+console.error(error);
+
+container.innerHTML = "<p>❌ ප්‍රවාහන ඉල්ලීම් ලබාගැනීමට නොහැකි වුණා.</p>";
+
+}
+
+};
 
 </script>
 </body>
