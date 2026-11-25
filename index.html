@@ -571,7 +571,12 @@ container.innerHTML = list.map(r => `
 <p>📍 ${r.from || ""} සිට ${r.to || ""}</p>
 <p>⚖️ බර: ${r.weight || 0} kg</p>
 <p>📅 දිනය: ${r.date || ""}</p>
-<p>📌 තත්ත්වය: ${r.status === "pending" ? "🟡 ප්‍රවාහනය සඳහා බලාපොරොත්තුවෙන්" : r.status}</p>
+<p>📌 තත්ත්වය: ${
+r.status === "pending" ? "🟡 ප්‍රවාහනය සඳහා බලාපොරොත්තුවෙන්" :
+r.status === "driver_found" ? "🔵 රියදුරෙකු සම්බන්ධ වී ඇත" :
+r.status === "completed" ? "🟢 ප්‍රවාහනය අවසන්" :
+"🟡 ප්‍රවාහනය සඳහා බලාපොරොත්තුවෙන්"
+}</p>
 <p>📞 ${r.phone || ""}</p>
 
 <a href="tel:${r.phone || ""}">
