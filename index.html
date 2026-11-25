@@ -134,6 +134,13 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <div class="card">
   <h2>🚛 ප්‍රවාහන ඉල්ලීම්</h2>
   <p>ගොවීන්ගේ අස්වැන්න ප්‍රවාහනය කිරීමට අවශ්‍ය ඉල්ලීම් මෙතැනින් බලන්න.</p>
+  <input
+  type="text"
+  id="transportSearch"
+  placeholder="🔍 එළවළු හෝ ගම සොයන්න..."
+  oninput="searchTransport()"
+  style="width:100%;padding:14px;margin:12px 0;border-radius:12px;border:1px solid #ccc;"
+>
   <div id="transportRequestsList">
     <p>ප්‍රවාහන ඉල්ලීම් ලබාගනිමින්...</p>
   </div>
@@ -649,7 +656,16 @@ alert("❌ තත්ත්වය වෙනස් කිරීමට නොහැ
 }
 
 };
-  
+
+window.searchTransport = function() {
+  const search = document.getElementById("transportSearch").value.toLowerCase();
+  const cards = document.querySelectorAll("#transportRequestsList .item");
+
+  cards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    card.style.display = text.includes(search) ? "" : "none";
+  });
+};
 window.deleteTransportRequest = async function(id){
 
 if(!auth.currentUser){
