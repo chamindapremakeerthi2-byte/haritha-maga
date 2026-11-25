@@ -107,23 +107,37 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <div id="products"></div>
 </section>
 
-<section id="transport" class="hidden">
-<div class="card">
-<h2>🚚 ප්‍රවාහන සේවාවක් ඉල්ලන්න</h2>
-<input id="from" placeholder="රැගෙන යන ස්ථානය">
-<input id="to" placeholder="ගෙනයන ස්ථානය">
-<input id="weight" type="number" placeholder="අස්වැන්නේ බර (kg)">
-<input id="transportPhone" type="tel" placeholder="ඔබගේ දුරකථන අංකය">
-<button class="btn" onclick="sendTransport()">ප්‍රවාහන ඉල්ලීම සකස් කරන්න</button>
-<div id="transportResult"></div>
-</div>
 
-<div class="card">
-<h2>🚛 ප්‍රවාහකයන්ට</h2>
-<p>ඔබට ලොරියක් හෝ ප්‍රවාහන සේවයක් තිබේ නම් ගොවීන්ගේ අස්වැන්න ප්‍රවාහනයට සම්බන්ධ විය හැක.</p>
-<p class="small">ප්‍රවාහක ලියාපදිංචිය ඉදිරි සංස්කරණයකදී එකතු කෙරේ.</p>
-</div>
+<section id="transport" class="hidden">
+  <div class="card">
+    <h2>🚚 ප්‍රවාහන සේවාවක් ඉල්ලන්න</h2>
+
+    <input id="from" placeholder="රැගෙන යන ස්ථානය">
+
+    <input id="to" placeholder="ගෙනයන ස්ථානය">
+
+    <input id="transportVeg" placeholder="එළවළු වර්ගය">
+
+    <input id="weight" type="number" placeholder="අස්වැන්නේ බර (kg)">
+
+    <input id="transportPhone" type="tel" placeholder="ඔබගේ දුරකථන අංකය">
+
+    <input id="transportDate" type="date">
+
+    <button class="btn" onclick="sendTransport()">
+      ප්‍රවාහන ඉල්ලීම සකස් කරන්න
+    </button>
+
+    <div id="transportResult"></div>
+  </div>
+
+  <div class="card">
+    <h2>🚛 ප්‍රවාහකයන්ට</h2>
+    <p>ඔබට ලොරියක් හෝ ප්‍රවාහන සේවයක් තිබේ නම් ගොවීන්ගේ අස්වැන්න ප්‍රවාහනයට සම්බන්ධ විය හැක.</p>
+    <p class="small">ප්‍රවාහක ලියාපදිංචිය ඉදිරි සංස්කරණයකදී එකතු කෙරේ.</p>
+  </div>
 </section>
+
 
 <section id="account" class="hidden">
 <div class="card">
