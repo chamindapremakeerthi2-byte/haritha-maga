@@ -571,11 +571,20 @@ container.innerHTML = list.map(r => `
 <p>⚖️ බර: ${r.weight || 0} kg</p>
 <p>📅 දිනය: ${r.date || ""}</p>
 <p>📞 ${r.phone || ""}</p>
+
 <a href="tel:${r.phone || ""}">
 <button class="btn">📞 ඉල්ලීම කළ පුද්ගලයා අමතන්න</button>
 </a>
+
+${auth.currentUser && r.ownerUid === auth.currentUser.uid ? `
+<button class="btn secondary" onclick="deleteTransportRequest('${r.id}')">
+🗑️ මගේ ඉල්ලීම ඉවත් කරන්න
+</button>
+` : ""}
+
 </div>
 `).join("");
+
 
 }catch(error){
 
@@ -587,6 +596,49 @@ container.innerHTML = "<p>❌ ප්‍රවාහන ඉල්ලීම් ල
 
 };
 
+
+window.deleteTransportRequest = async function(id){
+
+if(!auth.currentUser){
+alert("කරුණාකර Login වෙන්න.");
+return;
+}
+
+if(!confirm("ඔබගේ ප්‍රවාහන ඉල්ලීම ඉවත් කරන්නද?")){
+return;
+}
+
+try{
+
+const requestRef = doc(db,"transportRequests",id);
+const requestSnap = await getDoc(requestRef);
+
+if(!requestSnap.exists()){
+alert("ඉල්ලීම දැනටමත් ඉවත් කර ඇත.");
+return;
+}
+
+if(requestSnap.data().ownerUid !== auth.currentUser.uid){
+alert("මෙම ඉල්ලීම ඔබගේ එකක් නොවේ!");
+return;
+}
+
+await deleteDoc(requestRef);
+
+alert("✅ ප්‍රවාහන ඉල්ලීම ඉවත් කළා!");
+
+await loadTransportRequests();
+
+}catch(error){
+
+console.error(error);
+alert("❌ ඉල්ලීම ඉවත් කිරීමට නොහැකි වුණා.");
+
+}
+
+};
+
+  
 </script>
 </body>
 </html>
