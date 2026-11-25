@@ -474,26 +474,62 @@ alert("වෙනස් කිරීමට නොහැකි වුණා.");
 
 };
 
-window.sendTransport = function(){
-let from=document.getElementById("from").value.trim();
-let to=document.getElementById("to").value.trim();
-let weight=document.getElementById("weight").value;
-let phone=document.getElementById("transportPhone").value.trim();
 
-if(!from||!to||!weight||!phone){
+window.sendTransport = async function(){
+
+if(!auth.currentUser){
+alert("ප්‍රවාහන ඉල්ලීමක් යැවීමට කරුණාකර Login වෙන්න.");
+showPage("account");
+return;
+}
+
+let from = document.getElementById("from").value.trim();
+let to = document.getElementById("to").value.trim();
+let veg = document.getElementById("transportVeg").value.trim();
+let weight = document.getElementById("weight").value;
+let phone = document.getElementById("transportPhone").value.trim();
+let date = document.getElementById("transportDate").value;
+
+if(!from || !to || !veg || !weight || !phone || !date){
 alert("කරුණාකර සියලු තොරතුරු ඇතුළත් කරන්න.");
 return;
 }
 
+try{
+
+await addDoc(collection(db,"transportRequests"),{
+ownerUid: auth.currentUser.uid,
+from,
+to,
+veg,
+weight:Number(weight),
+phone,
+date,
+createdAt:Date.now()
+});
+
 document.getElementById("transportResult").innerHTML=`
 <div class="item">
-<h3>🚚 ප්‍රවාහන ඉල්ලීම සකස් කළා</h3>
+<h3>✅ ප්‍රවාහන ඉල්ලීම සාර්ථකව යැව්වා!</h3>
 <p>📍 ${from} සිට ${to} දක්වා</p>
-<p>⚖️ ${weight} kg</p>
+<p>🥬 එළවළු: ${veg}</p>
+<p>⚖️ බර: ${weight} kg</p>
 <p>📞 ${phone}</p>
-<p class="small">මෙය Demo එකක් පමණයි. ඉල්ලීම ප්‍රවාහකයෙකුට Online යවා නැත.</p>
+<p>📅 දිනය: ${date}</p>
+<p class="small">ඔබගේ ඉල්ලීම Firebase එකේ සුරැකුණා.</p>
 </div>`;
+
+["from","to","transportVeg","weight","transportPhone","transportDate"].forEach(id=>{
+document.getElementById(id).value="";
+});
+
+}catch(error){
+console.error(error);
+alert("❌ ප්‍රවාහන ඉල්ලීම සුරැකීමට නොහැකි වුණා.\n"+error.message);
+}
+
 };
+
 
 </script>
 </body>
