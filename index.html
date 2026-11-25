@@ -516,6 +516,7 @@ veg,
 weight:Number(weight),
 phone,
 date,
+status:"pending",
 createdAt:Date.now()
 });
 
@@ -570,6 +571,7 @@ container.innerHTML = list.map(r => `
 <p>📍 ${r.from || ""} සිට ${r.to || ""}</p>
 <p>⚖️ බර: ${r.weight || 0} kg</p>
 <p>📅 දිනය: ${r.date || ""}</p>
+<p>📌 තත්ත්වය: ${r.status === "pending" ? "🟡 ප්‍රවාහනය සඳහා බලාපොරොත්තුවෙන්" : r.status}</p>
 <p>📞 ${r.phone || ""}</p>
 
 <a href="tel:${r.phone || ""}">
@@ -577,6 +579,12 @@ container.innerHTML = list.map(r => `
 </a>
 
 ${auth.currentUser && r.ownerUid === auth.currentUser.uid ? `
+<select onchange="updateTransportStatus('${r.id}', this.value)">
+<option value="pending" ${r.status === "pending" ? "selected" : ""}>🟡 ප්‍රවාහනය සඳහා බලාපොරොත්තුවෙන්</option>
+<option value="driver_found" ${r.status === "driver_found" ? "selected" : ""}>🔵 රියදුරෙකු සම්බන්ධ වී ඇත</option>
+<option value="completed" ${r.status === "completed" ? "selected" : ""}>🟢 ප්‍රවාහනය අවසන්</option>
+</select>
+
 <button class="btn secondary" onclick="deleteTransportRequest('${r.id}')">
 🗑️ මගේ ඉල්ලීම ඉවත් කරන්න
 </button>
@@ -596,7 +604,47 @@ container.innerHTML = "<p>❌ ප්‍රවාහන ඉල්ලීම් ල
 
 };
 
+window.updateTransportStatus = async function(id, newStatus){
 
+if(!auth.currentUser){
+alert("කරුණාකර Login වෙන්න.");
+return;
+}
+
+const allowedStatuses = ["pending", "driver_found", "completed"];
+
+if(!allowedStatuses.includes(newStatus)){
+alert("වැරදි තත්ත්වයක්.");
+return;
+}
+
+try{
+
+const requestRef = doc(db,"transportRequests",id);
+const requestSnap = await getDoc(requestRef);
+
+if(!requestSnap.exists() || requestSnap.data().ownerUid !== auth.currentUser.uid){
+alert("මෙය ඔබගේ ඉල්ලීමක් නොවේ!");
+return;
+}
+
+await updateDoc(requestRef,{
+status: newStatus
+});
+
+alert("✅ තත්ත්වය යාවත්කාලීන කළා!");
+
+await loadTransportRequests();
+
+}catch(error){
+
+console.error(error);
+alert("❌ තත්ත්වය වෙනස් කිරීමට නොහැකි වුණා.");
+
+}
+
+};
+  
 window.deleteTransportRequest = async function(id){
 
 if(!auth.currentUser){
