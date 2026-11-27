@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HARITHA MAGA</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f2f7f0;color:#24382a}
@@ -20,15 +21,23 @@ h2{font-size:19px;margin-top:0}
 input,select,textarea{width:100%;padding:12px;margin:7px 0;border:1px solid #d6e2d6;border-radius:10px;font-size:15px}
 .btn{width:100%;padding:13px;background:#218044;color:white;border:0;border-radius:10px;font-weight:bold;margin-top:8px}
 .secondary{background:#e7f4e7;color:#21663a}
+.danger{background:#b93636;color:white}
 .price{font-size:20px;font-weight:bold;color:#16803e}
 .tag{display:inline-block;background:#e5f4e5;color:#25733e;padding:5px 9px;border-radius:20px;font-size:12px}
-.item{border:1px solid #e4ece3;padding:13px;border-radius:12px;margin:10px 0}
+.item{border:1px solid #e4ece3;padding:13px;border-radius:12px;margin:10px 0;background:white}
 .item img{width:100%;max-height:210px;object-fit:cover;border-radius:10px}
 .small{font-size:13px;color:#718071}
-.hidden{display:none}
+.hidden{display:none!important}
 footer{text-align:center;color:#819082;font-size:12px;padding:20px}
+.vegGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.vegCard{background:#e8f4e8;padding:12px;border-radius:18px;text-align:center;cursor:pointer}
+.vegCard img{width:100%;height:120px;object-fit:cover;border-radius:12px}
+.vegCard p{font-size:18px;margin:12px 0 0}
+.stockBox{background:#edf8ed;padding:12px;border-radius:12px;margin:10px 0}
+.stockBox strong{color:#16803e}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -50,10 +59,11 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <section id="home">
 <div class="card">
 <div style="background:linear-gradient(135deg,#176b3a,#56a86b);color:white;padding:22px;border-radius:15px;margin-bottom:15px;text-align:center">
-  <h2>🌱 HARITHA MAGA</h2>
-  <p>ගොවියාගේ අස්වැන්නට සාධාරණ මිලක්!</p>
-  <p>ගොවියාගෙන් සෘජුවම ඔබ වෙත 🥬</p>
+<h2>🌱 HARITHA MAGA</h2>
+<p>ගොවියාගේ අස්වැන්නට සාධාරණ මිලක්!</p>
+<p>ගොවියාගෙන් සෘජුවම ඔබ වෙත 🥬</p>
 </div>
+
 <h2>ආයුබෝවන්! 👋</h2>
 <p>HARITHA MAGA වෙත සාදරයෙන් පිළිගනිමු.</p>
 <p>ගොවියාගේ අස්වැන්න ගැනුම්කරුවන්ට සෘජුවම සම්බන්ධ කරන වෙළඳපොළ.</p>
@@ -64,77 +74,79 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 
 <div class="card">
-  <h2>🥬 එළවළු වර්ග</h2>
-  <p>ඔබට අවශ්‍ය එළවළු වර්ගය තෝරන්න.</p>
+<h2>🥬 එළවළු වර්ග</h2>
+<p>ඔබට අවශ්‍ය එළවළු වර්ගය තෝරන්න.</p>
 
-  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+<div class="vegGrid">
 
-    <div onclick="filterVegetable('කැරට්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/CARROT.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">කැරට්</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('කැරට්')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/CARROT.jpg">
+<p>කැරට්</p>
+</div>
 
-    <div onclick="filterVegetable('අර්තාපල්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Potato_tubers_in_pail.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">අර්තාපල්</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('අර්තාපල්')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Potato_tubers_in_pail.jpg">
+<p>අර්තාපල්</p>
+</div>
 
-    <div onclick="filterVegetable('ගෝවා')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cabbage%20vegetables.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-    <p style="font-size:20px;margin:14px 0 0">ගෝවා</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('ගෝවා')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cabbage%20vegetables.jpg">
+<p>ගෝවා</p>
+</div>
 
-    <div onclick="filterVegetable('තක්කාලි')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tomato_je.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">තක්කාලි</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('තක්කාලි')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tomato_je.jpg">
+<p>තක්කාලි</p>
+</div>
 
-    <div onclick="filterVegetable('ලීක්ස්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Leek.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">ලීක්ස්</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('ලීක්ස්')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Leek.jpg">
+<p>ලීක්ස්</p>
+</div>
 
-    <div onclick="filterVegetable('බෝංචි')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Green_beans.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">බෝංචි</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('බෝංචි')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Green_beans.jpg">
+<p>බෝංචි</p>
+</div>
 
-    <div onclick="filterVegetable('බීට්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Beet%20root.JPG" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">බීට්</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('බීට්')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Beet%20root.JPG">
+<p>බීට්</p>
+</div>
 
-    <div onclick="filterVegetable('වට්ටක්කා')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pumpkin.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">වට්ටක්කා</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('වට්ටක්කා')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pumpkin.jpg">
+<p>වට්ටක්කා</p>
+</div>
 
-    <div onclick="filterVegetable('වම්බටු')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Eggplant.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">වම්බටු</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('වම්බටු')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Eggplant.jpg">
+<p>වම්බටු</p>
+</div>
 
-    <div onclick="filterVegetable('මිරිස්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Green_chili_peppers.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">මිරිස්</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('මිරිස්')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Green_chili_peppers.jpg">
+<p>මිරිස්</p>
+</div>
 
-    <div onclick="filterVegetable('වෙනත්')" style="background:#e8f4e8;padding:12px 10px 20px;border-radius:22px;text-align:center;cursor:pointer">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vegetables.jpg" style="width:100%;height:120px;object-fit:cover;border-radius:15px">
-      <p style="font-size:20px;margin:14px 0 0">වෙනත්</p>
-    </div>
+<div class="vegCard" onclick="filterVegetable('වෙනත්')">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vegetables.jpg">
+<p>වෙනත්</p>
+</div>
 
-  </div>
+</div>
 
-  <button class="btn" onclick="document.getElementById('search').value='';showPage('market')">
-    🛒 සියලුම අස්වැන්න බලන්න
- </button>
- </div>
-</section> 
-  
+<button class="btn" onclick="document.getElementById('search').value='';showPage('market')">
+🛒 සියලුම අස්වැන්න බලන්න
+</button>
+</div>
+</section>
+
+<!-- SELL -->
 <section id="sell" class="hidden">
 <div class="card">
 <h2>🌾 අස්වැන්න විකුණන්න</h2>
+
 <input id="farmer" placeholder="ගොවියාගේ නම">
 <input id="phone" placeholder="දුරකථන අංකය" type="tel">
 
@@ -153,8 +165,8 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <option>වෙනත්</option>
 </select>
 
-<input id="quantity" type="number" placeholder="ප්‍රමාණය (කිලෝග්‍රෑම්)">
-<input id="price" type="number" placeholder="කිලෝවක මිල (රු.)">
+<input id="quantity" type="number" min="0.01" step="0.01" placeholder="ප්‍රමාණය (kg)">
+<input id="price" type="number" min="0" placeholder="කිලෝවක මිල (රු.)">
 <input id="location" placeholder="ගම / ප්‍රදේශය">
 <input id="photo" type="file" accept="image/*">
 <input id="available" type="date">
@@ -163,11 +175,13 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 </section>
 
+<!-- MARKET -->
 <section id="market" class="hidden">
 <div class="card">
 <h2>🛒 අස්වැන්න වෙළඳපොළ</h2>
 <input id="search" placeholder="🔎 එළවළු හෝ ප්‍රදේශය සොයන්න" oninput="renderProducts()">
-  <select id="sortPrice" onchange="renderProducts()">
+
+<select id="sortPrice" onchange="renderProducts()">
 <option value="newest">අලුත්ම දැන්වීම් මුලින්</option>
 <option value="low">අඩුම මිල මුලින්</option>
 <option value="high">වැඩිම මිල මුලින්</option>
@@ -176,392 +190,227 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <div id="products"></div>
 </section>
 
-
+<!-- TRANSPORT -->
 <section id="transport" class="hidden">
-  <div class="card">
-    <h2>🚚 ප්‍රවාහන සේවාවක් ඉල්ලන්න</h2>
+<div class="card">
+<h2>🚚 ප්‍රවාහන සේවාවක් ඉල්ලන්න</h2>
 
-    <input id="from" placeholder="රැගෙන යන ස්ථානය">
+<input id="from" placeholder="රැගෙන යන ස්ථානය">
+<input id="to" placeholder="ගෙනයන ස්ථානය">
+<input id="transportVeg" placeholder="එළවළු වර්ගය">
+<input id="weight" type="number" placeholder="අස්වැන්නේ බර (kg)">
+<input id="transportPhone" type="tel" placeholder="ඔබගේ දුරකථන අංකය">
+<input id="transportDate" type="date">
 
-    <input id="to" placeholder="ගෙනයන ස්ථානය">
-
-    <input id="transportVeg" placeholder="එළවළු වර්ගය">
-
-    <input id="weight" type="number" placeholder="අස්වැන්නේ බර (kg)">
-
-    <input id="transportPhone" type="tel" placeholder="ඔබගේ දුරකථන අංකය">
-
-    <input id="transportDate" type="date">
-
-    <button class="btn" onclick="sendTransport()">
-      ප්‍රවාහන ඉල්ලීම සකස් කරන්න
-    </button>
-
-    <div id="transportResult"></div>
-  </div>
+<button class="btn" onclick="sendTransport()">ප්‍රවාහන ඉල්ලීම සකස් කරන්න</button>
+<div id="transportResult"></div>
+</div>
 
 <div class="card">
-  <h2>🚛 ප්‍රවාහන ඉල්ලීම්</h2>
-  <p>ගොවීන්ගේ අස්වැන්න ප්‍රවාහනය කිරීමට අවශ්‍ය ඉල්ලීම් මෙතැනින් බලන්න.</p>
-  <input
-  type="text"
-  id="transportSearch"
-  placeholder="🔍 එළවළු හෝ ගම සොයන්න..."
-  oninput="searchTransport()"
-  style="width:100%;padding:14px;margin:12px 0;border-radius:12px;border:1px solid #ccc;"
->
-  <div id="transportRequestsList">
-    <p>ප්‍රවාහන ඉල්ලීම් ලබාගනිමින්...</p>
-  </div>
+<h2>🚛 ප්‍රවාහන ඉල්ලීම්</h2>
+<p>අස්වැන්න ප්‍රවාහනය කිරීමට අවශ්‍ය ඉල්ලීම් මෙතැනින් බලන්න.</p>
+<input id="transportSearch" placeholder="🔍 එළවළු හෝ ගම සොයන්න" oninput="searchTransport()">
+<div id="transportRequestsList">ප්‍රවාහන ඉල්ලීම් ලබාගනිමින්...</div>
 </div>
 </section>
 
+<!-- ACCOUNT -->
 <section id="account" class="hidden">
 <div class="card">
 <h2>👤 මගේ ගිණුම</h2>
 
 <input id="email" type="email" placeholder="Email ලිපිනය">
-
 <input id="password" type="password" placeholder="මුරපදය">
 
 <button class="btn" onclick="registerUser()">📝 අලුත් ගිණුමක් හදන්න</button>
-
 <button class="btn secondary" onclick="loginUser()">🔐 Login වෙන්න</button>
-
 <button class="btn secondary" onclick="logoutUser()">🚪 Logout වෙන්න</button>
 
 <p id="authMessage"></p>
 
-<button class="btn" onclick="showPage('myAds')">
-🧑‍🌾 මගේ දැන්වීම් බලන්න
-</button>
-  
+<button class="btn" onclick="showPage('myAds')">🧑‍🌾 මගේ දැන්වීම් බලන්න</button>
 </div>
 </section>
 
+<!-- MY ADS -->
 <section id="myAds" class="hidden">
-  <div class="card">
-    <h2>🧑‍🌾 මගේ දැන්වීම්</h2>
-    <div id="myProducts"></div>
-  </div>
+<div class="card">
+<h2>🧑‍🌾 මගේ දැන්වීම්</h2>
+<div id="myProducts"></div>
+</div>
 </section>
-  
+
 </main>
+
 <footer>HARITHA MAGA 🌱 · ගොවියාගේ ශක්තිය</footer>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 
 import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-getDoc,
-deleteDoc,
-doc,
-updateDoc
+getFirestore,collection,addDoc,getDocs,getDoc,deleteDoc,doc,
+updateDoc,runTransaction
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 import {
-getAuth,
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
-signOut,
-onAuthStateChanged
+getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
+signOut,onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-  
-const firebaseConfig = {
-apiKey: "AIzaSyAuz4oqBkwHf2qJ_93hGN9UyLcxSQZO71I",
-authDomain: "haritha-maga.firebaseapp.com",
-projectId: "haritha-maga",
-storageBucket: "haritha-maga.firebasestorage.app",
-messagingSenderId: "905401030287",
-appId: "1:905401030287:web:3eb62aacec81becb60c2fa",
-measurementId: "G-B1T94LD7QV"
+
+const firebaseConfig={
+apiKey:"AIzaSyAuz4oqBkwHf2qJ_93hGN9UyLcxSQZO71I",
+authDomain:"haritha-maga.firebaseapp.com",
+projectId:"haritha-maga",
+storageBucket:"haritha-maga.firebasestorage.app",
+messagingSenderId:"905401030287",
+appId:"1:905401030287:web:3eb62aacec81becb60c2fa",
+measurementId:"G-B1T94LD7QV"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-const productsRef = collection(db,"products");
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
+const productsRef=collection(db,"products");
 
-window.registerUser = async function(){
-
-const email = document.getElementById("email").value.trim();
-const password = document.getElementById("password").value;
-
+window.registerUser=async function(){
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
 try{
 await createUserWithEmailAndPassword(auth,email,password);
-document.getElementById("authMessage").innerText =
-"✅ ගිණුම සාර්ථකව හැදුවා!";
+document.getElementById("authMessage").innerText="✅ ගිණුම සාර්ථකව හැදුවා!";
 }catch(error){
-document.getElementById("authMessage").innerText =
-"❌ " + error.message;
+document.getElementById("authMessage").innerText="❌ "+error.message;
 }
-
 };
 
-window.loginUser = async function(){
-
-const email = document.getElementById("email").value.trim();
-const password = document.getElementById("password").value;
-
+window.loginUser=async function(){
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
 try{
 await signInWithEmailAndPassword(auth,email,password);
-document.getElementById("authMessage").innerText =
-"✅ සාර්ථකව Login වුණා!";
+document.getElementById("authMessage").innerText="✅ සාර්ථකව Login වුණා!";
 }catch(error){
-document.getElementById("authMessage").innerText =
-"❌ " + error.message;
+document.getElementById("authMessage").innerText="❌ "+error.message;
 }
-
 };
 
-window.logoutUser = async function(){
-
+window.logoutUser=async function(){
 try{
 await signOut(auth);
-document.getElementById("authMessage").innerText =
-"ඔබ Logout වුණා.";
+document.getElementById("authMessage").innerText="ඔබ Logout වුණා.";
 }catch(error){
-document.getElementById("authMessage").innerText =
-"❌ " + error.message;
+document.getElementById("authMessage").innerText="❌ "+error.message;
 }
-
 };
 
-window.filterVegetable = function(veg){
+onAuthStateChanged(auth,user=>{
+if(document.getElementById("myAds").classList.contains("hidden")===false){
+renderMyAds();
+}
+if(document.getElementById("market").classList.contains("hidden")===false){
+renderProducts();
+}
+if(document.getElementById("transport").classList.contains("hidden")===false){
+loadTransportRequests();
+}
+});
 
-document.getElementById("search").value = veg;
-
+window.filterVegetable=function(veg){
+document.getElementById("search").value=veg;
 showPage("market");
-
 };
-  
-window.showPage = function(page){
 
+window.showPage=function(page){
 ["home","sell","market","transport","account","myAds"].forEach(id=>{
 document.getElementById(id).classList.add("hidden");
 });
-
 document.getElementById(page).classList.remove("hidden");
 
-if(page==="market"){
-renderProducts();
-}
-
-if(page==="transport"){
-loadTransportRequests();
-}
-
-if(page==="myAds"){
-renderMyAds();
-}
-
+if(page==="market")renderProducts();
+if(page==="transport")loadTransportRequests();
+if(page==="myAds")renderMyAds();
 };
 
-window.renderMyAds = async function(){
-
-const container = document.getElementById("myProducts");
-
-if(!auth.currentUser){
-container.innerHTML = `
-<p>🔐 ඔබගේ දැන්වීම් බැලීමට Login වෙන්න.</p>
-<button class="btn" onclick="showPage('account')">
-Login වෙන්න
-</button>
-`;
-return;
-}
-
-container.innerHTML = "<p>⏳ ඔබගේ දැන්වීම් ලබාගනිමින්...</p>";
-
-try{
-
-const snapshot = await getDocs(productsRef);
-
-let list = snapshot.docs
-.map(d=>({id:d.id,...d.data()}))
-.filter(p=>p.ownerUid === auth.currentUser.uid);
-
-list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-
-if(list.length === 0){
-container.innerHTML = `
-<p>🌱 ඔබ තවම දැන්වීම් පළ කර නැහැ.</p>
-<button class="btn" onclick="showPage('sell')">
-🌾 අලුත් දැන්වීමක් පළ කරන්න
-</button>
-`;
-return;
-}
-
-container.innerHTML = list.map(p=>`
-<div class="item">
-
-<p>
-📌 තත්ත්වය:
-${p.sold ? "🔴 විකුණා අවසන්" : "🟢 විකිණීමට ඇත"}
-</p>
-${p.photo ? `<img src="${p.photo}" alt="අස්වැන්න">` : ""}
-<h3>🥬 ${p.veg||""}</h3>
-<div class="price">රු. ${p.price||0} / kg</div>
-<p>⚖️ ප්‍රමාණය: ${p.qty||0} kg</p>
-<p>📍 ${p.loc||""}</p>
-<p>👨‍🌾 ${p.farmer||""}</p>
-<p>📞 ${p.phone||""}</p>
-<p>📅 ලබාගත හැකි දිනය: ${p.available||"දැන්"}</p>
-
-<button class="btn" onclick="toggleSold('${p.id}', ${p.sold ? 'false' : 'true'})">
-${p.sold ? "🟢 නැවත විකිණීමට දමන්න" : "🔴 විකුණා අවසන් ලෙස සලකුණු කරන්න"}
-</button>
-
-<button class="btn" onclick="editProduct('${p.id}')">
-✏️ දැන්වීම සංස්කරණය කරන්න
-</button>
-
-<button class="btn secondary" onclick="deleteProduct('${p.id}')">
-🗑️ දැන්වීම ඉවත් කරන්න
-</button>
-</div>
-`).join("");
-
-}catch(error){
-console.error(error);
-container.innerHTML = "<p>❌ දැන්වීම් ලබාගැනීමට නොහැකි වුණා.</p>";
-}
-
-};
-
-window.toggleSold = async function(id, sold){
-
-try{
-
-await updateDoc(doc(db,"products",id),{
-sold:sold
-});
-
-alert(sold ? "🔴 දැන්වීම විකුණා අවසන්!" : "🟢 නැවත විකිණීමට දැන්වීම සක්‍රීය කළා!");
-
-renderMyAds();
-
-}catch(error){
-
-alert("❌ තත්ත්වය වෙනස් කිරීමට නොහැකි වුණා: "+error.message);
-
-}
-
-};
-  
 async function uploadPhoto(file){
+if(!file)return "";
+const formData=new FormData();
+formData.append("file",file);
+formData.append("upload_preset","haritha_maga_upload");
 
-if(!file) return "";
-
-const formData = new FormData();
-
-formData.append("file", file);
-formData.append("upload_preset", "haritha_maga_upload");
-
-const response = await fetch(
-"https://api.cloudinary.com/v1_1/g9qaspdq/image/upload",
-{
-method:"POST",
-body:formData
-}
-);
-
-if(!response.ok){
-throw new Error("Photo upload failed");
-}
-
-const data = await response.json();
-
+const response=await fetch("https://api.cloudinary.com/v1_1/g9qaspdq/image/upload",{
+method:"POST",body:formData
+});
+if(!response.ok)throw new Error("Photo upload failed");
+const data=await response.json();
 return data.secure_url;
 }
-window.addProduct = async function(){
 
+window.addProduct=async function(){
 if(!auth.currentUser){
 alert("දැන්වීමක් පළ කිරීමට කරුණාකර Login වෙන්න.");
 showPage("account");
 return;
 }
-  
+
 let farmer=document.getElementById("farmer").value.trim();
 let phone=document.getElementById("phone").value.trim();
 let veg=document.getElementById("vegetable").value;
-let qty=document.getElementById("quantity").value;
-let price=document.getElementById("price").value;
+let qty=Number(document.getElementById("quantity").value);
+let price=Number(document.getElementById("price").value);
 let loc=document.getElementById("location").value.trim();
 let photo=document.getElementById("photo").files[0];
 let available=document.getElementById("available").value;
 
-if(!farmer||!phone||!veg||!qty||!price||!loc){
-alert("කරුණාකර අවශ්‍ය සියලු තොරතුරු ඇතුළත් කරන්න.");
+if(!farmer||!phone||!veg||qty<=0||price<=0||!loc){
+alert("කරුණාකර අවශ්‍ය සියලු තොරතුරු නිවැරදිව ඇතුළත් කරන්න.");
 return;
 }
 
 try{
-
-let photoURL = await uploadPhoto(photo);
+let photoURL=await uploadPhoto(photo);
 
 await addDoc(productsRef,{
 farmer,
-ownerUid: auth.currentUser.uid,
-phone,
-veg,
-qty:Number(qty),
-price:Number(price),
-loc,
+ownerUid:auth.currentUser.uid,
+phone,veg,
+qty:qty,
+initialQty:qty,
+price,loc,
 photo:photoURL,
 available,
+sold:false,
 createdAt:Date.now()
 });
 
-alert("✅ දැන්වීම Firebase එකේ සාර්ථකව සුරැකුණා!");
+alert("✅ දැන්වීම සාර්ථකව පළ කළා!");
 
 ["farmer","phone","vegetable","quantity","price","location","photo","available"].forEach(id=>{
 document.getElementById(id).value="";
 });
-
 showPage("market");
-
 }catch(error){
-console.error("HARITHA MAGA Error:",error);
-alert("❌ දැන්වීම පළ කිරීමට නොහැකි වුණා.\n\n" + error.message);
+console.error(error);
+alert("❌ දැන්වීම පළ කිරීමට නොහැකි වුණා.\n"+error.message);
 }
 };
 
-
-window.renderProducts = async function(){
-
-let container=document.getElementById("products");
+window.renderProducts=async function(){
+const container=document.getElementById("products");
 container.innerHTML='<div class="card">⏳ දැන්වීම් ලබාගනිමින්...</div>';
 
 try{
+const snapshot=await getDocs(productsRef);
+let list=snapshot.docs.map(d=>({id:d.id,...d.data()}))
+.filter(p=>!p.sold&&Number(p.qty)>0);
 
-const snapshot = await getDocs(productsRef);
-
-let list=snapshot.docs
-.map(d=>({id:d.id,...d.data()}))
-.filter(p=>!p.sold);
-
-let search=(document.getElementById("search")?.value||"").toLowerCase();
-  
-list=list.filter(p=>
-((p.veg||"")+" "+(p.loc||"")+" "+(p.farmer||"")).toLowerCase().includes(search)
-);
+let search=(document.getElementById("search").value||"").toLowerCase();
+list=list.filter(p=>((p.veg||"")+" "+(p.loc||"")+" "+(p.farmer||"")).toLowerCase().includes(search));
 
 let sort=document.getElementById("sortPrice").value;
-
-if(sort==="low"){
-list.sort((a,b)=>(a.price||0)-(b.price||0));
-}else if(sort==="high"){
-list.sort((a,b)=>(b.price||0)-(a.price||0));
-}else{
-list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-}
+if(sort==="low")list.sort((a,b)=>(a.price||0)-(b.price||0));
+else if(sort==="high")list.sort((a,b)=>(b.price||0)-(a.price||0));
+else list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
 
 if(list.length===0){
 container.innerHTML='<div class="card">දැනට දැන්වීම් නැහැ. අලුත් අස්වැන්නක් පළ කරන්න 🌱</div>';
@@ -574,17 +423,16 @@ ${p.photo?`<img src="${p.photo}" alt="අස්වැන්න">`:""}
 <span class="tag">🌱 නැවුම් අස්වැන්න</span>
 <h2>${p.veg||""}</h2>
 <div class="price">රු. ${p.price||0} / kg</div>
-<p>⚖️ ප්‍රමාණය: ${p.qty||0} kg</p>
+<div class="stockBox">📦 ඉතිරි තොගය: <strong>${p.qty} kg</strong></div>
 <p>📍 ${p.loc||""}</p>
 <p>👨‍🌾 ${p.farmer||""}</p>
 <p>📅 ලබාගත හැකි දිනය: ${p.available||"දැන්"}</p>
-<a href="tel:${p.phone||""}">
-<button class="btn">📞 ගොවියාට කතා කරන්න</button>
-</a>
-${auth.currentUser && p.ownerUid === auth.currentUser.uid ? `
-<button class="btn" onclick="editProduct('${p.id}')">✏️ දැන්වීම සංස්කරණය කරන්න</button>
+<a href="tel:${p.phone||""}"><button class="btn">📞 ගොවියාට කතා කරන්න</button></a>
+
+${auth.currentUser&&p.ownerUid===auth.currentUser.uid?`
+<button class="btn secondary" onclick="editProduct('${p.id}')">✏️ දැන්වීම සංස්කරණය කරන්න</button>
 <button class="btn secondary" onclick="deleteProduct('${p.id}')">🗑️ දැන්වීම ඉවත් කරන්න</button>
-` : ""}
+`:""}
 </div>
 `).join("");
 
@@ -594,73 +442,175 @@ container.innerHTML='<div class="card">❌ දැන්වීම් ලබාග
 }
 };
 
-window.deleteProduct = async function(id){
+window.renderMyAds=async function(){
+const container=document.getElementById("myProducts");
 
+if(!auth.currentUser){
+container.innerHTML='<p>🔐 ඔබගේ දැන්වීම් බැලීමට Login වෙන්න.</p><button class="btn" onclick="showPage(\'account\')">Login වෙන්න</button>';
+return;
+}
+
+container.innerHTML="<p>⏳ දැන්වීම් ලබාගනිමින්...</p>";
+
+try{
+const snapshot=await getDocs(productsRef);
+let list=snapshot.docs.map(d=>({id:d.id,...d.data()}))
+.filter(p=>p.ownerUid===auth.currentUser.uid);
+list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+if(!list.length){
+container.innerHTML='<p>🌱 ඔබ තවම දැන්වීම් පළ කර නැහැ.</p><button class="btn" onclick="showPage(\'sell\')">🌾 අලුත් දැන්වීමක් පළ කරන්න</button>';
+return;
+}
+
+container.innerHTML=list.map(p=>`
+<div class="item">
+${p.photo?`<img src="${p.photo}" alt="අස්වැන්න">`:""}
+<h3>🥬 ${p.veg||""}</h3>
+<p>📌 තත්ත්වය: ${p.sold?"🔴 විකුණා අවසන්":"🟢 විකිණීමට ඇත"}</p>
+<div class="price">රු. ${p.price||0} / kg</div>
+<div class="stockBox">
+📦 ඉතිරි තොගය: <strong>${p.qty||0} kg</strong>
+<p class="small">මුලින් පළ කළ තොගය: ${p.initialQty||p.qty||0} kg</p>
+</div>
+<p>📍 ${p.loc||""}</p>
+<p>👨‍🌾 ${p.farmer||""}</p>
+<p>📞 ${p.phone||""}</p>
+<p>📅 ලබාගත හැකි දිනය: ${p.available||"දැන්"}</p>
+
+${!p.sold&&Number(p.qty)>0?`
+<input id="sellQty_${p.id}" type="number" min="0.01" step="0.01" placeholder="විකුණන ප්‍රමාණය (kg)">
+<button class="btn" onclick="sellStock('${p.id}')">📦 කිලෝ විකුණන්න / තොගයෙන් අඩු කරන්න</button>
+`:""}
+
+<button class="btn" onclick="toggleSold('${p.id}',${p.sold?"false":"true"})">
+${p.sold?"🟢 නැවත විකිණීමට දමන්න":"🔴 විකුණා අවසන් ලෙස සලකුණු කරන්න"}
+</button>
+
+<button class="btn secondary" onclick="editProduct('${p.id}')">✏️ දැන්වීම සංස්කරණය කරන්න</button>
+<button class="btn secondary" onclick="deleteProduct('${p.id}')">🗑️ දැන්වීම ඉවත් කරන්න</button>
+</div>
+`).join("");
+
+}catch(error){
+console.error(error);
+container.innerHTML="<p>❌ දැන්වීම් ලබාගැනීමට නොහැකි වුණා.</p>";
+}
+};
+
+/* STOCK SELLING */
+window.sellStock=async function(id){
 if(!auth.currentUser){
 alert("කරුණාකර Login වෙන්න.");
 return;
 }
 
-if(!confirm("මෙම දැන්වීම ඉවත් කරන්නද?"))return;
+const input=document.getElementById("sellQty_"+id);
+const amount=Number(input?.value);
 
-try{
-const productRef = doc(db,"products",id);
-const productSnap = await getDoc(productRef);
-
-if(!productSnap.exists()) return;
-
-if(productSnap.data().ownerUid !== auth.currentUser.uid){
-alert("මෙම දැන්වීම ඔබගේ එකක් නොවේ!");
+if(!amount||amount<=0){
+alert("විකුණන කිලෝ ප්‍රමාණය නිවැරදිව ඇතුළත් කරන්න.");
 return;
 }
 
-await deleteDoc(productRef);
+try{
+const productRef=doc(db,"products",id);
+
+await runTransaction(db,async transaction=>{
+const snap=await transaction.get(productRef);
+
+if(!snap.exists())throw new Error("දැන්වීම සොයාගත නොහැක.");
+
+const data=snap.data();
+
+if(data.ownerUid!==auth.currentUser.uid){
+throw new Error("මෙය ඔබගේ දැන්වීමක් නොවේ.");
+}
+
+if(data.sold)throw new Error("මෙම දැන්වීම විකුණා අවසන් කර ඇත.");
+
+const currentQty=Number(data.qty||0);
+
+if(amount>currentQty){
+throw new Error("ඉතිරි තොගයට වඩා වැඩි ප්‍රමාණයක් විකුණන්න බැහැ. ඉතිරිව ඇත්තේ "+currentQty+" kg.");
+}
+
+const remaining=currentQty-amount;
+
+transaction.update(productRef,{
+qty:remaining,
+sold:remaining<=0
+});
+});
+
+alert("✅ විකිණීම සාර්ථකයි! තොගය යාවත්කාලීන කළා.");
+renderMyAds();
 renderProducts();
 
 }catch(error){
-alert("දැන්වීම ඉවත් කිරීමට නොහැකි වුණා.");
+console.error(error);
+alert("❌ "+error.message);
+}
+};
+
+window.toggleSold=async function(id,sold){
+try{
+const productRef=doc(db,"products",id);
+const snap=await getDoc(productRef);
+
+if(!snap.exists())return;
+
+if(!auth.currentUser||snap.data().ownerUid!==auth.currentUser.uid){
+alert("මෙය ඔබගේ දැන්වීමක් නොවේ!");
+return;
 }
 
+await updateDoc(productRef,{sold:sold});
+alert(sold?"🔴 විකුණා අවසන් ලෙස සලකුණු කළා!":"🟢 නැවත විකිණීමට සක්‍රීය කළා!");
+renderMyAds();
+renderProducts();
+}catch(error){
+alert("❌ "+error.message);
+}
 };
-window.editProduct = async function(id){
 
+window.editProduct=async function(id){
 if(!auth.currentUser){
 alert("කරුණාකර Login වෙන්න.");
 return;
 }
 
 try{
+const productRef=doc(db,"products",id);
+const snap=await getDoc(productRef);
 
-const productRef = doc(db,"products",id);
-const productSnap = await getDoc(productRef);
+if(!snap.exists())return;
+const p=snap.data();
 
-if(!productSnap.exists()) return;
-
-if(productSnap.data().ownerUid !== auth.currentUser.uid){
+if(p.ownerUid!==auth.currentUser.uid){
 alert("මෙම දැන්වීම ඔබගේ එකක් නොවේ!");
 return;
 }
 
-const newPrice = prompt("අලුත් මිල (රු./kg) ඇතුළත් කරන්න:");
-if(newPrice === null) return;
+const newPrice=prompt("අලුත් මිල (රු./kg):",p.price);
+if(newPrice===null)return;
+const newFarmer=prompt("ගොවියාගේ නම:",p.farmer);
+if(newFarmer===null)return;
+const newVeg=prompt("එළවළු වර්ගය:",p.veg);
+if(newVeg===null)return;
+const newLoc=prompt("ප්‍රදේශය:",p.loc);
+if(newLoc===null)return;
+const newPhoto=prompt("ඡායාරූප URL එක (තිබේ නම්):",p.photo||"");
+if(newPhoto===null)return;
+const newQty=prompt("ඉතිරි තොග ප්‍රමාණය (kg):",p.qty);
+if(newQty===null)return;
+const newPhone=prompt("දුරකථන අංකය:",p.phone);
+if(newPhone===null)return;
 
-const newFarmer = prompt("අලුත් ගොවියාගේ නම:");
-if(newFarmer === null) return;
-
-const newVeg = prompt("අලුත් එළවළු වර්ගය:");
-if(newVeg === null) return;
-
-const newLoc = prompt("අලුත් ප්‍රදේශය:");
-if(newLoc === null) return;
-
-const newPhoto = prompt("අලුත් ඡායාරූප URL එක:");
-if(newPhoto === null) return;
-
-const newQty = prompt("අලුත් ප්‍රමාණය (kg):");
-if(newQty === null) return;
-
-const newPhone = prompt("අලුත් දුරකථන අංකය:");
-if(newPhone === null) return;
+if(Number(newPrice)<=0||Number(newQty)<0){
+alert("මිල සහ ප්‍රමාණය නිවැරදිව ඇතුළත් කරන්න.");
+return;
+}
 
 await updateDoc(productRef,{
 price:Number(newPrice),
@@ -669,49 +619,69 @@ phone:newPhone,
 farmer:newFarmer,
 veg:newVeg,
 loc:newLoc,
-photo:newPhoto
+photo:newPhoto,
+sold:Number(newQty)<=0
 });
 
-alert("දැන්වීම යාවත්කාලීන කළා!");
+alert("✅ දැන්වීම යාවත්කාලීන කළා!");
+renderMyAds();
 renderProducts();
 
 }catch(error){
-alert("වෙනස් කිරීමට නොහැකි වුණා.");
+console.error(error);
+alert("❌ වෙනස් කිරීමට නොහැකි වුණා.");
 }
-
 };
 
-
-window.sendTransport = async function(){
-
+window.deleteProduct=async function(id){
 if(!auth.currentUser){
-alert("ප්‍රවාහන ඉල්ලීමක් යැවීමට කරුණාකර Login වෙන්න.");
+alert("කරුණාකර Login වෙන්න.");
+return;
+}
+if(!confirm("මෙම දැන්වීම ඉවත් කරන්නද?"))return;
+
+try{
+const ref=doc(db,"products",id);
+const snap=await getDoc(ref);
+
+if(!snap.exists())return;
+if(snap.data().ownerUid!==auth.currentUser.uid){
+alert("මෙම දැන්වීම ඔබගේ එකක් නොවේ!");
+return;
+}
+await deleteDoc(ref);
+alert("දැන්වීම ඉවත් කළා!");
+renderProducts();
+renderMyAds();
+}catch(error){
+alert("❌ ඉවත් කිරීමට නොහැකි වුණා.");
+}
+};
+
+/* TRANSPORT */
+window.sendTransport=async function(){
+if(!auth.currentUser){
+alert("ප්‍රවාහන ඉල්ලීමක් යැවීමට Login වෙන්න.");
 showPage("account");
 return;
 }
 
-let from = document.getElementById("from").value.trim();
-let to = document.getElementById("to").value.trim();
-let veg = document.getElementById("transportVeg").value.trim();
-let weight = document.getElementById("weight").value;
-let phone = document.getElementById("transportPhone").value.trim();
-let date = document.getElementById("transportDate").value;
+let from=document.getElementById("from").value.trim();
+let to=document.getElementById("to").value.trim();
+let veg=document.getElementById("transportVeg").value.trim();
+let weight=Number(document.getElementById("weight").value);
+let phone=document.getElementById("transportPhone").value.trim();
+let date=document.getElementById("transportDate").value;
 
-if(!from || !to || !veg || !weight || !phone || !date){
-alert("කරුණාකර සියලු තොරතුරු ඇතුළත් කරන්න.");
+if(!from||!to||!veg||weight<=0||!phone||!date){
+alert("කරුණාකර සියලු තොරතුරු නිවැරදිව ඇතුළත් කරන්න.");
 return;
 }
 
 try{
-
 await addDoc(collection(db,"transportRequests"),{
-ownerUid: auth.currentUser.uid,
-from,
-to,
-veg,
-weight:Number(weight),
-phone,
-date,
+ownerUid:auth.currentUser.uid,
+from,to,veg,weight,phone,date,
 status:"pending",
 createdAt:Date.now()
 });
@@ -722,11 +692,10 @@ document.getElementById("transportResult").innerHTML=`
 <div class="item">
 <h3>✅ ප්‍රවාහන ඉල්ලීම සාර්ථකව යැව්වා!</h3>
 <p>📍 ${from} සිට ${to} දක්වා</p>
-<p>🥬 එළවළු: ${veg}</p>
-<p>⚖️ බර: ${weight} kg</p>
+<p>🥬 ${veg}</p>
+<p>⚖️ ${weight} kg</p>
 <p>📞 ${phone}</p>
-<p>📅 දිනය: ${date}</p>
-<p class="small">ඔබගේ ඉල්ලීම Firebase එකේ සුරැකුණා.</p>
+<p>📅 ${date}</p>
 </div>`;
 
 ["from","to","transportVeg","weight","transportPhone","transportDate"].forEach(id=>{
@@ -734,169 +703,111 @@ document.getElementById(id).value="";
 });
 
 }catch(error){
-console.error(error);
-alert("❌ ප්‍රවාහන ඉල්ලීම සුරැකීමට නොහැකි වුණා.\n"+error.message);
+alert("❌ "+error.message);
 }
-
 };
-window.loadTransportRequests = async function(){
 
-const container = document.getElementById("transportRequestsList");
-
-container.innerHTML = "<p>⏳ ප්‍රවාහන ඉල්ලීම් ලබාගනිමින්...</p>";
+window.loadTransportRequests=async function(){
+const container=document.getElementById("transportRequestsList");
+container.innerHTML="<p>⏳ ලබාගනිමින්...</p>";
 
 try{
-
-const snapshot = await getDocs(collection(db,"transportRequests"));
+const snapshot=await getDocs(collection(db,"transportRequests"));
 
 if(snapshot.empty){
-container.innerHTML = "<p>දැනට ප්‍රවාහන ඉල්ලීම් නැහැ.</p>";
+container.innerHTML="<p>දැනට ප්‍රවාහන ඉල්ලීම් නැහැ.</p>";
 return;
 }
 
-let list = snapshot.docs.map(doc => ({
-id: doc.id,
-...doc.data()
-}));
-
+let list=snapshot.docs.map(d=>({id:d.id,...d.data()}));
 list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
 
-container.innerHTML = list.map(r => `
+container.innerHTML=list.map(r=>`
 <div class="item">
-<h3>🚚 ${r.veg || ""}</h3>
-<p>📍 ${r.from || ""} සිට ${r.to || ""}</p>
-<p>⚖️ බර: ${r.weight || 0} kg</p>
-<p>📅 දිනය: ${r.date || ""}</p>
-<p>📌 තත්ත්වය: ${
-r.status === "pending" ? "🟡 ප්‍රවාහනය සඳහා බලාපොරොත්තුවෙන්" :
-r.status === "driver_found" ? "🔵 රියදුරෙකු සම්බන්ධ වී ඇත" :
-r.status === "completed" ? "🟢 ප්‍රවාහනය අවසන්" :
-"🟡 ප්‍රවාහනය සඳහා බලාපොරොත්තුවෙන්"
-}</p>
-<p>📞 ${r.phone || ""}</p>
+<h3>🚚 ${r.veg||""}</h3>
+<p>📍 ${r.from||""} සිට ${r.to||""}</p>
+<p>⚖️ බර: ${r.weight||0} kg</p>
+<p>📅 දිනය: ${r.date||""}</p>
+<p>📌 තත්ත්වය:
+${r.status==="pending"?"🟡 බලාපොරොත්තුවෙන්":
+r.status==="driver_found"?"🔵 රියදුරෙකු සම්බන්ධ වී ඇත":"🟢 අවසන්"}
+</p>
+<p>📞 ${r.phone||""}</p>
 
-<a href="tel:${r.phone || ""}">
+<a href="tel:${r.phone||""}">
 <button class="btn">📞 ඉල්ලීම කළ පුද්ගලයා අමතන්න</button>
 </a>
 
-${auth.currentUser && r.ownerUid === auth.currentUser.uid ? `
-<select onchange="updateTransportStatus('${r.id}', this.value)">
-<option value="pending" ${r.status === "pending" ? "selected" : ""}>🟡 ප්‍රවාහනය සඳහා බලාපොරොත්තුවෙන්</option>
-<option value="driver_found" ${r.status === "driver_found" ? "selected" : ""}>🔵 රියදුරෙකු සම්බන්ධ වී ඇත</option>
-<option value="completed" ${r.status === "completed" ? "selected" : ""}>🟢 ප්‍රවාහනය අවසන්</option>
+${auth.currentUser&&r.ownerUid===auth.currentUser.uid?`
+<select onchange="updateTransportStatus('${r.id}',this.value)">
+<option value="pending" ${r.status==="pending"?"selected":""}>🟡 බලාපොරොත්තුවෙන්</option>
+<option value="driver_found" ${r.status==="driver_found"?"selected":""}>🔵 රියදුරෙකු සම්බන්ධ වී ඇත</option>
+<option value="completed" ${r.status==="completed"?"selected":""}>🟢 අවසන්</option>
 </select>
-
-<button class="btn secondary" onclick="deleteTransportRequest('${r.id}')">
-🗑️ මගේ ඉල්ලීම ඉවත් කරන්න
-</button>
-` : ""}
-
+<button class="btn secondary" onclick="deleteTransportRequest('${r.id}')">🗑️ ඉල්ලීම ඉවත් කරන්න</button>
+`:""}
 </div>
 `).join("");
 
+searchTransport();
 
 }catch(error){
-
 console.error(error);
-
-container.innerHTML = "<p>❌ ප්‍රවාහන ඉල්ලීම් ලබාගැනීමට නොහැකි වුණා.</p>";
-
+container.innerHTML="<p>❌ ඉල්ලීම් ලබාගැනීමට නොහැකි වුණා.</p>";
 }
-
 };
 
-window.updateTransportStatus = async function(id, newStatus){
-
-if(!auth.currentUser){
-alert("කරුණාකර Login වෙන්න.");
-return;
-}
-
-const allowedStatuses = ["pending", "driver_found", "completed"];
-
-if(!allowedStatuses.includes(newStatus)){
-alert("වැරදි තත්ත්වයක්.");
-return;
-}
+window.updateTransportStatus=async function(id,status){
+if(!auth.currentUser)return;
 
 try{
+const ref=doc(db,"transportRequests",id);
+const snap=await getDoc(ref);
 
-const requestRef = doc(db,"transportRequests",id);
-const requestSnap = await getDoc(requestRef);
-
-if(!requestSnap.exists() || requestSnap.data().ownerUid !== auth.currentUser.uid){
+if(!snap.exists()||snap.data().ownerUid!==auth.currentUser.uid){
 alert("මෙය ඔබගේ ඉල්ලීමක් නොවේ!");
 return;
 }
 
-await updateDoc(requestRef,{
-status: newStatus
-});
+if(!["pending","driver_found","completed"].includes(status))return;
 
+await updateDoc(ref,{status});
 alert("✅ තත්ත්වය යාවත්කාලීන කළා!");
-
-await loadTransportRequests();
-
+loadTransportRequests();
 }catch(error){
-
-console.error(error);
-alert("❌ තත්ත්වය වෙනස් කිරීමට නොහැකි වුණා.");
-
+alert("❌ "+error.message);
 }
-
 };
 
-window.searchTransport = function() {
-  const search = document.getElementById("transportSearch").value.toLowerCase();
-  const cards = document.querySelectorAll("#transportRequestsList .item");
-
-  cards.forEach(card => {
-    const text = card.innerText.toLowerCase();
-    card.style.display = text.includes(search) ? "" : "none";
-  });
+window.searchTransport=function(){
+const search=document.getElementById("transportSearch").value.toLowerCase();
+document.querySelectorAll("#transportRequestsList .item").forEach(card=>{
+card.style.display=card.innerText.toLowerCase().includes(search)?"":"none";
+});
 };
-window.deleteTransportRequest = async function(id){
 
-if(!auth.currentUser){
-alert("කරුණාකර Login වෙන්න.");
-return;
-}
-
-if(!confirm("ඔබගේ ප්‍රවාහන ඉල්ලීම ඉවත් කරන්නද?")){
-return;
-}
+window.deleteTransportRequest=async function(id){
+if(!auth.currentUser)return;
+if(!confirm("ඔබගේ ප්‍රවාහන ඉල්ලීම ඉවත් කරන්නද?"))return;
 
 try{
+const ref=doc(db,"transportRequests",id);
+const snap=await getDoc(ref);
 
-const requestRef = doc(db,"transportRequests",id);
-const requestSnap = await getDoc(requestRef);
-
-if(!requestSnap.exists()){
-alert("ඉල්ලීම දැනටමත් ඉවත් කර ඇත.");
+if(!snap.exists())return;
+if(snap.data().ownerUid!==auth.currentUser.uid){
+alert("මෙය ඔබගේ ඉල්ලීමක් නොවේ!");
 return;
 }
 
-if(requestSnap.data().ownerUid !== auth.currentUser.uid){
-alert("මෙම ඉල්ලීම ඔබගේ එකක් නොවේ!");
-return;
-}
-
-await deleteDoc(requestRef);
-
-alert("✅ ප්‍රවාහන ඉල්ලීම ඉවත් කළා!");
-
-await loadTransportRequests();
-
+await deleteDoc(ref);
+alert("✅ ඉල්ලීම ඉවත් කළා!");
+loadTransportRequests();
 }catch(error){
-
-console.error(error);
-alert("❌ ඉල්ලීම ඉවත් කිරීමට නොහැකි වුණා.");
-
+alert("❌ "+error.message);
 }
-
 };
 
-  
 </script>
 </body>
 </html>
