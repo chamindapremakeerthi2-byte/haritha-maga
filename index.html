@@ -39,6 +39,7 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 .profilePhoto{width:125px;height:125px;border-radius:50%;object-fit:cover;border:4px solid #e5f2e5;display:block;margin:10px auto}
 .profileName{text-align:center;font-size:22px;font-weight:bold}
 .profileInfo{text-align:center;color:#637363}
+.unread{border:2px solid #56a86b!important}
 </style>
 </head>
 
@@ -57,6 +58,7 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <button onclick="showPage('transport')">🚚 ප්‍රවාහනය</button>
 <button onclick="showPage('account')">👤 ගිණුම</button>
 <button id="ordersNav" class="hidden" onclick="showPage('orders')">📦 Orders</button>
+<button id="notificationsNav" class="hidden" onclick="showPage('notifications')">🔔 දැනුම්දීම් <span id="unreadCount"></span></button>
 <button onclick="showPage('profile')">🧑‍🌾 Profile</button>
 </nav>
 
@@ -186,6 +188,7 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <button class="btn" onclick="showPage('myAds')">🧑‍🌾 මගේ දැන්වීම් බලන්න</button>
 <button class="btn secondary" onclick="showPage('profile')">👤 මගේ ගොවි Profile එක</button>
 <button class="btn secondary" onclick="showPage('orders')">📦 මගේ Orders</button>
+<button class="btn secondary" onclick="showPage('notifications')">🔔 මගේ දැනුම්දීම්</button>
 </div>
 </section>
 
@@ -236,6 +239,17 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 </section>
 
+<!-- NOTIFICATIONS -->
+
+<section id="notifications" class="hidden">
+<div class="card">
+<h2>🔔 මගේ දැනුම්දීම්</h2>
+<button class="btn secondary" onclick="loadNotifications()">🔄 නැවත ලබාගන්න</button>
+<button class="btn secondary" onclick="markAllNotificationsRead()">✅ සියල්ල කියවූ ලෙස සලකුණු කරන්න</button>
+<div id="notificationsList">දැනුම්දීම් ලබාගනිමින්...</div>
+</div>
+</section>
+
 </main>
 
 <footer>HARITHA MAGA 🌱 · ගොවියාගේ ශක්තිය</footer>
@@ -270,6 +284,8 @@ const db=getFirestore(app);
 const auth=getAuth(app);
 
 const productsRef=collection(db,"products");
+const notificationsRef=collection(db,"notifications");
+
 let selectedProfilePhoto="";
 
 
@@ -296,6 +312,172 @@ return data.secure_url;
 }
 
 
+/* NOTIFICATIONS */
+
+async function createNotification(userUid,title,message,orderId){
+
+if(!userUid||!orderId)return;
+
+try{
+
+await addDoc(notificationsRef,{
+userUid,
+title,
+message,
+orderId,
+read:false,
+createdAt:Date.now()
+});
+
+if(auth.currentUser&&auth.currentUser.uid===userUid){
+loadNotifications();
+}
+
+}catch(error){
+
+// දැනුම්දීමක් යැවීම අසාර්ථක වුවත්
+// Order එකේ ප්‍රධාන ක්‍රියාවලිය නතර නොකරයි.
+console.error("Notification error:",error);
+
+}
+
+}
+
+
+window.loadNotifications=async function(){
+
+const container=document.getElementById("notificationsList");
+
+if(!auth.currentUser){
+container.innerHTML="🔐 දැනුම්දීම් බැලීමට Login වෙන්න.";
+document.getElementById("unreadCount").innerText="";
+return;
+}
+
+container.innerHTML="⏳ දැනුම්දීම් ලබාගනිමින්...";
+
+try{
+
+const q=query(
+notificationsRef,
+where("userUid","==",auth.currentUser.uid)
+);
+
+const snapshot=await getDocs(q);
+
+let list=snapshot.docs.map(d=>({
+id:d.id,
+...d.data()
+}));
+
+list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+const unread=list.filter(n=>!n.read).length;
+
+document.getElementById("unreadCount").innerText=
+unread>0?"("+unread+")":"";
+
+if(!list.length){
+
+container.innerHTML="<p>🔔 තවම දැනුම්දීම් නැහැ.</p>";
+return;
+
+}
+
+container.innerHTML=list.map(n=>`
+
+<div class="item ${!n.read?"unread":""}">
+
+<h3>${n.read?"":"🔴 "}${n.title||"දැනුම්දීම"}</h3>
+
+<p>${n.message||""}</p>
+
+<p class="small">
+${new Date(n.createdAt||Date.now()).toLocaleString("si-LK")}
+</p>
+
+${!n.read?`
+<button class="btn secondary" onclick="markNotificationRead('${n.id}')">
+✅ කියවූ ලෙස සලකුණු කරන්න
+</button>
+`:"<span class='tag'>කියවා ඇත</span>"}
+
+</div>
+
+`).join("");
+
+}catch(error){
+
+container.innerHTML="❌ දැනුම්දීම් ලබාගැනීමට නොහැකි වුණා: "+error.message;
+
+}
+
+};
+
+
+window.markNotificationRead=async function(id){
+
+if(!auth.currentUser)return;
+
+try{
+
+const ref=doc(db,"notifications",id);
+const snap=await getDoc(ref);
+
+if(!snap.exists())return;
+
+if(snap.data().userUid!==auth.currentUser.uid)return;
+
+await updateDoc(ref,{read:true});
+
+loadNotifications();
+
+}catch(error){
+
+alert("❌ "+error.message);
+
+}
+
+};
+
+
+window.markAllNotificationsRead=async function(){
+
+if(!auth.currentUser)return;
+
+try{
+
+const q=query(
+notificationsRef,
+where("userUid","==",auth.currentUser.uid)
+);
+
+const snapshot=await getDocs(q);
+
+for(const item of snapshot.docs){
+
+if(!item.data().read){
+
+await updateDoc(
+doc(db,"notifications",item.id),
+{read:true}
+);
+
+}
+
+}
+
+loadNotifications();
+
+}catch(error){
+
+alert("❌ "+error.message);
+
+}
+
+};
+
+
 /* REGISTER */
 
 window.registerUser=async function(){
@@ -318,7 +500,7 @@ document.getElementById("authMessage").innerText="❌ "+error.message;
 };
 
 
-/* LOGIN - GO HOME */
+/* LOGIN */
 
 window.loginUser=async function(){
 
@@ -398,18 +580,24 @@ alert("❌ Email යැවීමට නොහැකි වුණා: "+error.mes
 onAuthStateChanged(auth,user=>{
 
 const ordersNav=document.getElementById("ordersNav");
+const notificationsNav=document.getElementById("notificationsNav");
 
 if(user){
 
 ordersNav.classList.remove("hidden");
+notificationsNav.classList.remove("hidden");
 
 loadMyProfile();
+loadNotifications();
 
 }else{
 
 ordersNav.classList.add("hidden");
+notificationsNav.classList.add("hidden");
 
+document.getElementById("unreadCount").innerText="";
 document.getElementById("orders").classList.add("hidden");
+document.getElementById("notifications").classList.add("hidden");
 
 document.getElementById("profileStatus").innerText="🔐 Profile එක සකස් කිරීමට Login වෙන්න.";
 
@@ -437,6 +625,14 @@ showPage("home");
 }
 }
 
+if(!document.getElementById("notifications").classList.contains("hidden")){
+if(user){
+loadNotifications();
+}else{
+showPage("home");
+}
+}
+
 });
 
 
@@ -444,20 +640,21 @@ showPage("home");
 
 window.showPage=function(page){
 
-if(page==="orders"&&!auth.currentUser){
-alert("📦 Orders බැලීමට Login වෙන්න.");
+if((page==="orders"||page==="myAds"||page==="notifications")&&!auth.currentUser){
+
+alert("මෙම පහසුකම භාවිතා කිරීමට Login වෙන්න.");
 showPage("account");
 return;
+
 }
 
-if(page==="myAds"&&!auth.currentUser){
-alert("මගේ දැන්වීම් බැලීමට Login වෙන්න.");
-showPage("account");
-return;
-}
+[
+"home","sell","market","transport","account",
+"profile","myAds","orders","notifications"
+].forEach(id=>{
 
-["home","sell","market","transport","account","profile","myAds","orders"].forEach(id=>{
 document.getElementById(id).classList.add("hidden");
+
 });
 
 document.getElementById(page).classList.remove("hidden");
@@ -467,6 +664,7 @@ if(page==="transport"&&auth.currentUser)loadTransportRequests();
 if(page==="myAds")renderMyAds();
 if(page==="profile")loadMyProfile();
 if(page==="orders")loadOrders();
+if(page==="notifications")loadNotifications();
 
 };
 
@@ -900,7 +1098,7 @@ ${p.sold?"🟢 නැවත විකිණීමට දමන්න":"🔴 ව�
 
 }catch(error){
 
-container.innerHTML="<p>❌ දැන්වීම් ලබාගැනීමට නොහැකි වුණා.</p>";
+container.innerHTML="<p>❌ දැන්වීම් ලබාගැනීමට නොහැකි වුණා: "+error.message+"</p>";
 
 }
 
@@ -1041,7 +1239,8 @@ if(newQty===null)return;
 const newPhone=prompt("දුරකථන අංකය:",p.phone);
 if(newPhone===null)return;
 
-if(Number(newPrice)<=0||Number(newQty)<0){
+if(!Number.isFinite(Number(newPrice))||Number(newPrice)<=0||
+!Number.isFinite(Number(newQty))||Number(newQty)<0){
 alert("මිල සහ ප්‍රමාණය නිවැරදිව ඇතුළත් කරන්න.");
 return;
 }
@@ -1144,7 +1343,7 @@ return;
 
 const qty=Number(prompt("Order කිරීමට අවශ්‍ය ප්‍රමාණය (kg):","1"));
 
-if(!qty||qty<=0)return;
+if(!Number.isFinite(qty)||qty<=0)return;
 
 if(qty>Number(p.qty)){
 alert("ප්‍රමාණවත් තොගයක් නැහැ. ඉතිරිව ඇත්තේ "+p.qty+" kg.");
@@ -1166,7 +1365,7 @@ const confirmOrder=confirm(
 
 if(!confirmOrder)return;
 
-await addDoc(collection(db,"orders"),{
+const newOrder=await addDoc(collection(db,"orders"),{
 
 buyerUid:auth.currentUser.uid,
 buyerEmail:auth.currentUser.email||"",
@@ -1186,6 +1385,14 @@ status:"pending",
 createdAt:Date.now()
 
 });
+
+// ගොවියාට අලුත් Order එක ගැන දැනුම්දීම
+await createNotification(
+p.ownerUid,
+"🛒 අලුත් ඇණවුමක් ලැබුණා!",
+p.veg+" සඳහා "+qty+" kg ඇණවුමක් ලැබී ඇත.",
+newOrder.id
+);
 
 alert("✅ ඔබගේ Order එක සාර්ථකව යැව්වා!");
 
@@ -1367,9 +1574,9 @@ qty:remaining,
 sold:remaining<=0
 });
 
+// Firestore Rules අනුව status පමණක් වෙනස් කරයි
 transaction.update(orderRef,{
-status:"accepted",
-acceptedAt:Date.now()
+status:"accepted"
 });
 
 });
@@ -1394,10 +1601,44 @@ if(newStatus==="completed"&&order.status!=="accepted"){
 throw new Error("පිළිගත් Order එකක් පමණක් අවසන් කළ හැක.");
 }
 
+// Firestore Rules අනුව status පමණක් වෙනස් කරයි
 await updateDoc(orderRef,{
-status:newStatus,
-updatedAt:Date.now()
+status:newStatus
 });
+
+}
+
+// Order යාවත්කාලීන වූ පසු ගැනුම්කරුට දැනුම්දීම
+const latestOrderSnap=await getDoc(orderRef);
+
+if(latestOrderSnap.exists()){
+
+const latestOrder=latestOrderSnap.data();
+
+let message="";
+
+if(newStatus==="accepted"){
+message="ඔබගේ "+latestOrder.veg+" Order එක ගොවියා පිළිගෙන ඇත.";
+}
+
+if(newStatus==="rejected"){
+message="ඔබගේ "+latestOrder.veg+" Order එක ගොවියා ප්‍රතික්ෂේප කර ඇත.";
+}
+
+if(newStatus==="completed"){
+message="ඔබගේ "+latestOrder.veg+" Order එක සම්පූර්ණ කර ඇත.";
+}
+
+if(message){
+
+await createNotification(
+latestOrder.buyerUid,
+"📦 Order යාවත්කාලීන කිරීම",
+message,
+orderId
+);
+
+}
 
 }
 
@@ -1587,7 +1828,7 @@ searchTransport();
 
 console.error(error);
 
-container.innerHTML="<p>❌ ඉල්ලීම් ලබාගැනීමට නොහැකි වුණා.</p>";
+container.innerHTML="<p>❌ ඉල්ලීම් ලබාගැනීමට නොහැකි වුණා: "+error.message+"</p>";
 
 }
 
