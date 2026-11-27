@@ -387,39 +387,82 @@ alert("❌ Profile එක සුරැකීමට නොහැකි වුණ�
 }
 };
 
+
 window.viewFarmerProfile=async function(uid){
 showPage("profile");
+
 const box=document.getElementById("publicProfile");
 box.innerHTML="⏳ ගොවි Profile එක ලබාගනිමින්...";
+
 try{
+
 const snap=await getDoc(doc(db,"farmerProfiles",uid));
+
 if(!snap.exists()){
 box.innerHTML="<p>මෙම ගොවියා තවම Profile එකක් සකස් කර නැහැ.</p>";
 return;
 }
+
 const p=snap.data();
-const photo=p.photo?`<img class="profilePhoto" src="${p.photo}" alt="ගොවි Profile">`:"";
+
+const photo=p.photo?
+`<img class="profilePhoto" src="${p.photo}" alt="ගොවි Profile">`:"";
+
 const products=await getDocs(productsRef);
-const ads=products.docs.map(d=>({id:d.id,...d.data()}))
+
+const ads=products.docs
+.map(d=>({id:d.id,...d.data()}))
 .filter(x=>x.ownerUid===uid&&!x.sold&&Number(x.qty)>0);
+
 box.innerHTML=`
+
 ${photo}
+
 <div class="profileName">${p.name||"ගොවියා"}</div>
+
 <p class="profileInfo">📍 ${p.location||""}</p>
 <p>📞 ${p.phone||""}</p>
 <p>🥬 වගා කරන එළවළු: ${p.crops||"සඳහන් කර නැහැ"}</p>
 <p>📝 ${p.bio||"විස්තර ඇතුළත් කර නැහැ."}</p>
-<a href="tel:${p.phone||""}"><button class="btn">📞 ගොවියා අමතන්න</button></a>
+
+<a href="tel:${p.phone||""}">
+<button class="btn">📞 ගොවියා අමතන්න</button>
+</a>
+
 <h3>🛒 මෙම ගොවියාගේ දැන්වීම් (${ads.length})</h3>
+
 ${ads.length?ads.map(a=>`
+
 <div class="item">
+
+${a.photo?`
+<img
+src="${a.photo}"
+alt="${a.veg||"එළවළු"}"
+style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-bottom:12px;"
+onerror="this.style.display='none'"
+>`:""}
+
 <h3>${a.veg||""}</h3>
+
 <p class="price">රු. ${a.price||0} / kg</p>
+
 <p>📦 ඉතිරි තොගය: ${a.qty||0} kg</p>
+
 <p>📍 ${a.loc||""}</p>
-</div>`).join(""):"<p>දැනට විකිණීමට දැන්වීම් නැහැ.</p>"}
+
+</div>
+
+`).join(""):"<p>දැනට විකිණීමට දැන්වීම් නැහැ.</p>"}
+
 `;
-}catch(error){box.innerHTML="❌ Profile ලබාගැනීමට නොහැකි වුණා: "+error.message;}
+
+}catch(error){
+
+box.innerHTML="❌ Profile ලබාගැනීමට නොහැකි වුණා: "+error.message;
+
+}
+
 };
 
 /* ADD PRODUCT */
