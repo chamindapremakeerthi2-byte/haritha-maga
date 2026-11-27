@@ -400,6 +400,11 @@ return;
 
 container.innerHTML = list.map(p=>`
 <div class="item">
+
+<p>
+📌 තත්ත්වය:
+${p.sold ? "🔴 විකුණා අවසන්" : "🟢 විකිණීමට ඇත"}
+</p>
 ${p.photo ? `<img src="${p.photo}" alt="අස්වැන්න">` : ""}
 <h3>🥬 ${p.veg||""}</h3>
 <div class="price">රු. ${p.price||0} / kg</div>
@@ -408,6 +413,10 @@ ${p.photo ? `<img src="${p.photo}" alt="අස්වැන්න">` : ""}
 <p>👨‍🌾 ${p.farmer||""}</p>
 <p>📞 ${p.phone||""}</p>
 <p>📅 ලබාගත හැකි දිනය: ${p.available||"දැන්"}</p>
+
+<button class="btn" onclick="toggleSold('${p.id}', ${p.sold ? 'false' : 'true'})">
+${p.sold ? "🟢 නැවත විකිණීමට දමන්න" : "🔴 විකුණා අවසන් ලෙස සලකුණු කරන්න"}
+</button>
 
 <button class="btn" onclick="editProduct('${p.id}')">
 ✏️ දැන්වීම සංස්කරණය කරන්න
