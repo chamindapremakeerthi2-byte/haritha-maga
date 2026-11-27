@@ -155,6 +155,10 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <input id="password" type="password" placeholder="මුරපදය">
 <button class="btn" onclick="registerUser()">📝 අලුත් ගිණුමක් හදන්න</button>
 <button class="btn secondary" onclick="loginUser()">🔐 Login වෙන්න</button>
+
+<!-- අලුතින් එකතු කළ Password Reset බොත්තම -->
+<button class="btn secondary" onclick="resetPassword()">🔑 මුරපදය අමතක වුණාද?</button>
+
 <button class="btn secondary" onclick="logoutUser()">🚪 Logout වෙන්න</button>
 <p id="authMessage"></p>
 <button class="btn" onclick="showPage('myAds')">🧑‍🌾 මගේ දැන්වීම් බලන්න</button>
@@ -203,7 +207,7 @@ updateDoc,runTransaction,setDoc
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import {
 getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
-signOut,onAuthStateChanged
+sendPasswordResetEmail,signOut,onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
 const firebaseConfig={
@@ -259,6 +263,27 @@ try{
 await signOut(auth);
 document.getElementById("authMessage").innerText="ඔබ Logout වුණා.";
 }catch(error){document.getElementById("authMessage").innerText="❌ "+error.message;}
+};
+
+/* අලුතින් එකතු කළ Password Reset Function */
+window.resetPassword=async function(){
+const email=document.getElementById("email").value.trim();
+
+if(!email){
+alert("කරුණාකර ඔබගේ Email ලිපිනය ඇතුළත් කරන්න.");
+return;
+}
+
+try{
+await sendPasswordResetEmail(auth,email);
+alert("✅ මුරපදය නැවත සකස් කිරීමේ Email එක යැව්වා. ඔබගේ Inbox එක පරීක්ෂා කරන්න.");
+}catch(error){
+if(error.code==="auth/invalid-email"){
+alert("❌ Email ලිපිනය නිවැරදිව ඇතුළත් කරන්න.");
+}else{
+alert("❌ Email යැවීමට නොහැකි වුණා: "+error.message);
+}
+}
 };
 
 onAuthStateChanged(auth,user=>{
