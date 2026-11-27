@@ -162,10 +162,17 @@ messagingSenderId:"905401030287",
 appId:"1:905401030287:web:3eb62aacec81becb60c2fa",
 measurementId:"G-B1T94LD7QV"
 };
+
 const app=initializeApp(firebaseConfig),db=getFirestore(app),auth=getAuth(app);
+
 const messaging=getMessaging(app);
-const VAPID_KEY="BKq93Gk0YWxgWhclk5AKLa-dOQDuMotuSpU-cMg7M62hYACvlGU6l_QJD";
-const productsRef=collection(db,"products"),profilesRef=collection(db,"farmerProfiles"),ordersRef=collection(db,"orders");
+
+const VAPID_KEY="BKq93Gk0YWxgWhclk5AKLa-dOQDuMotuSpU-cMg7M62hYACvlGU6l_QJDENMrx-TVfgvUYnbDmRAHFnwrramVTk";
+
+const productsRef=collection(db,"products"),
+profilesRef=collection(db,"farmerProfiles"),
+ordersRef=collection(db,"orders");
+
 let selectedProfilePhoto="";
 
 async function uploadPhoto(file){
