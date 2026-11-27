@@ -434,6 +434,26 @@ container.innerHTML = "<p>❌ දැන්වීම් ලබාගැනීම�
 }
 
 };
+
+window.toggleSold = async function(id, sold){
+
+try{
+
+await updateDoc(doc(db,"products",id),{
+sold:sold
+});
+
+alert(sold ? "🔴 දැන්වීම විකුණා අවසන්!" : "🟢 නැවත විකිණීමට දැන්වීම සක්‍රීය කළා!");
+
+renderMyAds();
+
+}catch(error){
+
+alert("❌ තත්ත්වය වෙනස් කිරීමට නොහැකි වුණා: "+error.message);
+
+}
+
+};
   
 async function uploadPhoto(file){
 
