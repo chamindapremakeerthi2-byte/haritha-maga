@@ -362,6 +362,70 @@ renderMyAds();
 
 };
 
+window.renderMyAds = async function(){
+
+const container = document.getElementById("myProducts");
+
+if(!auth.currentUser){
+container.innerHTML = `
+<p>🔐 ඔබගේ දැන්වීම් බැලීමට Login වෙන්න.</p>
+<button class="btn" onclick="showPage('account')">
+Login වෙන්න
+</button>
+`;
+return;
+}
+
+container.innerHTML = "<p>⏳ ඔබගේ දැන්වීම් ලබාගනිමින්...</p>";
+
+try{
+
+const snapshot = await getDocs(productsRef);
+
+let list = snapshot.docs
+.map(d=>({id:d.id,...d.data()}))
+.filter(p=>p.ownerUid === auth.currentUser.uid);
+
+list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+if(list.length === 0){
+container.innerHTML = `
+<p>🌱 ඔබ තවම දැන්වීම් පළ කර නැහැ.</p>
+<button class="btn" onclick="showPage('sell')">
+🌾 අලුත් දැන්වීමක් පළ කරන්න
+</button>
+`;
+return;
+}
+
+container.innerHTML = list.map(p=>`
+<div class="item">
+${p.photo ? `<img src="${p.photo}" alt="අස්වැන්න">` : ""}
+<h3>🥬 ${p.veg||""}</h3>
+<div class="price">රු. ${p.price||0} / kg</div>
+<p>⚖️ ප්‍රමාණය: ${p.qty||0} kg</p>
+<p>📍 ${p.loc||""}</p>
+<p>👨‍🌾 ${p.farmer||""}</p>
+<p>📞 ${p.phone||""}</p>
+<p>📅 ලබාගත හැකි දිනය: ${p.available||"දැන්"}</p>
+
+<button class="btn" onclick="editProduct('${p.id}')">
+✏️ දැන්වීම සංස්කරණය කරන්න
+</button>
+
+<button class="btn secondary" onclick="deleteProduct('${p.id}')">
+🗑️ දැන්වීම ඉවත් කරන්න
+</button>
+</div>
+`).join("");
+
+}catch(error){
+console.error(error);
+container.innerHTML = "<p>❌ දැන්වීම් ලබාගැනීමට නොහැකි වුණා.</p>";
+}
+
+};
+  
 async function uploadPhoto(file){
 
 if(!file) return "";
