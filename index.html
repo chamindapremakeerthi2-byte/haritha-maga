@@ -342,7 +342,7 @@ showPage("market");
   
 window.showPage = function(page){
 
-["home","sell","market","transport","account"].forEach(id=>{
+["home","sell","market","transport","account","myAds"].forEach(id=>{
 document.getElementById(id).classList.add("hidden");
 });
 
@@ -354,6 +354,10 @@ renderProducts();
 
 if(page==="transport"){
 loadTransportRequests();
+}
+
+if(page==="myAds"){
+renderMyAds();
 }
 
 };
