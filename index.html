@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="si">
 <head>
@@ -64,10 +63,9 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 
 <main>
 
-<!-- HOME -->
-
 <section id="home">
 <div class="card">
+
 <div style="background:linear-gradient(135deg,#176b3a,#56a86b);color:white;padding:22px;border-radius:15px;margin-bottom:15px;text-align:center">
 <h2>🌱 HARITHA MAGA</h2>
 <p>ගොවියාගේ අස්වැන්නට සාධාරණ මිලක්!</p>
@@ -106,8 +104,6 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 </section>
 
-<!-- SELL -->
-
 <section id="sell" class="hidden">
 <div class="card">
 <h2>🌾 අස්වැන්න විකුණන්න</h2>
@@ -132,8 +128,6 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 </section>
 
-<!-- MARKET -->
-
 <section id="market" class="hidden">
 <div class="card">
 <h2>🛒 අස්වැන්න වෙළඳපොළ</h2>
@@ -147,8 +141,6 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 <div id="products"></div>
 </section>
-
-<!-- TRANSPORT -->
 
 <section id="transport" class="hidden">
 <div class="card">
@@ -164,13 +156,11 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 
 <div class="card">
-<h2>🚛 ප්‍රවාහන ඉල්ලීම්</h2>
+<h2>🚛 ප්‍රවාහன ඉල්ලීම්</h2>
 <input id="transportSearch" placeholder="🔍 එළවළු හෝ ගම සොයන්න" oninput="searchTransport()">
 <div id="transportRequestsList">ප්‍රවාහන ඉල්ලීම් ලබාගනිමින්...</div>
 </div>
 </section>
-
-<!-- ACCOUNT -->
 
 <section id="account" class="hidden">
 <div class="card">
@@ -191,8 +181,6 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <button class="btn secondary" onclick="showPage('notifications')">🔔 මගේ දැනුම්දීම්</button>
 </div>
 </section>
-
-<!-- PROFILE -->
 
 <section id="profile" class="hidden">
 <div class="card">
@@ -219,16 +207,12 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 </div>
 </section>
 
-<!-- MY ADS -->
-
 <section id="myAds" class="hidden">
 <div class="card">
 <h2>🧑‍🌾 මගේ දැන්වීම්</h2>
 <div id="myProducts"></div>
 </div>
 </section>
-
-<!-- ORDERS -->
 
 <section id="orders" class="hidden">
 <div class="card">
@@ -238,8 +222,6 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 <div id="ordersList">Orders ලබාගනිමින්...</div>
 </div>
 </section>
-
-<!-- NOTIFICATIONS -->
 
 <section id="notifications" class="hidden">
 <div class="card">
@@ -260,14 +242,13 @@ import {initializeApp} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-
 
 import {
 getFirestore,collection,addDoc,getDocs,getDoc,deleteDoc,doc,
-updateDoc,runTransaction,setDoc,query,where
+updateDoc,runTransaction,setDoc,query,where,onSnapshot
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 import {
 getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
 sendPasswordResetEmail,signOut,onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
 
 const firebaseConfig={
 apiKey:"AIzaSyAuz4oqBkwHf2qJ_93hGN9UyLcxSQZO71I",
@@ -287,7 +268,6 @@ const productsRef=collection(db,"products");
 const notificationsRef=collection(db,"notifications");
 
 let selectedProfilePhoto="";
-
 
 /* PHOTO UPLOAD */
 
@@ -311,8 +291,60 @@ return data.secure_url;
 
 }
 
+/* REAL-TIME NOTIFICATIONS */
 
-/* NOTIFICATIONS */
+let notificationUnsubscribe=null;
+
+/* RENDER NOTIFICATIONS */
+
+function renderNotificationList(list){
+
+const container=document.getElementById("notificationsList");
+if(!container)return;
+
+list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+const unread=list.filter(n=>!n.read).length;
+
+const badge=document.getElementById("unreadCount");
+
+if(badge){
+badge.innerText=unread>0?"("+unread+")":"";
+}
+
+if(!list.length){
+container.innerHTML="<p>🔔 තවම දැනුම්දීම් නැහැ.</p>";
+return;
+}
+
+container.innerHTML=list.map(n=>`
+
+<div class="item ${!n.read?"unread":""}">
+
+<h3>${n.read?"":"🔴 "}${n.title||"දැනුම්දීම"}</h3>
+
+<p>${n.message||""}</p>
+
+<p class="small">
+${new Date(n.createdAt||Date.now()).toLocaleString("si-LK")}
+</p>
+
+${!n.read?`
+
+<button class="btn secondary"
+onclick="markNotificationRead('${n.id}')">
+✅ කියවූ ලෙස සලකුණු කරන්න
+</button>
+
+`:"<span class='tag'>කියවා ඇත</span>"}
+
+</div>
+
+`).join("");
+
+}
+
+/* CREATE NOTIFICATION */
 
 async function createNotification(userUid,title,message,orderId){
 
@@ -329,29 +361,70 @@ read:false,
 createdAt:Date.now()
 });
 
-if(auth.currentUser&&auth.currentUser.uid===userUid){
-loadNotifications();
-}
-
 }catch(error){
 
-// දැනුම්දීමක් යැවීම අසාර්ථක වුවත්
-// Order එකේ ප්‍රධාන ක්‍රියාවලිය නතර නොකරයි.
 console.error("Notification error:",error);
 
 }
 
 }
 
+/* START REAL-TIME LISTENER */
+
+window.startRealtimeNotifications=function(){
+
+if(!auth.currentUser)return;
+
+if(notificationUnsubscribe){
+notificationUnsubscribe();
+notificationUnsubscribe=null;
+}
+
+const q=query(
+notificationsRef,
+where("userUid","==",auth.currentUser.uid)
+);
+
+notificationUnsubscribe=onSnapshot(q,snapshot=>{
+
+const list=snapshot.docs.map(d=>({
+id:d.id,
+...d.data()
+}));
+
+renderNotificationList(list);
+
+},error=>{
+
+console.error("Realtime notification error:",error);
+
+});
+
+};
+
+/* STOP REAL-TIME LISTENER */
+
+function stopRealtimeNotifications(){
+
+if(notificationUnsubscribe){
+notificationUnsubscribe();
+notificationUnsubscribe=null;
+}
+
+}
+
+/* LOAD NOTIFICATIONS */
 
 window.loadNotifications=async function(){
 
 const container=document.getElementById("notificationsList");
 
 if(!auth.currentUser){
+
 container.innerHTML="🔐 දැනුම්දීම් බැලීමට Login වෙන්න.";
 document.getElementById("unreadCount").innerText="";
 return;
+
 }
 
 container.innerHTML="⏳ දැනුම්දීම් ලබාගනිමින්...";
@@ -365,46 +438,12 @@ where("userUid","==",auth.currentUser.uid)
 
 const snapshot=await getDocs(q);
 
-let list=snapshot.docs.map(d=>({
+const list=snapshot.docs.map(d=>({
 id:d.id,
 ...d.data()
 }));
 
-list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-
-const unread=list.filter(n=>!n.read).length;
-
-document.getElementById("unreadCount").innerText=
-unread>0?"("+unread+")":"";
-
-if(!list.length){
-
-container.innerHTML="<p>🔔 තවම දැනුම්දීම් නැහැ.</p>";
-return;
-
-}
-
-container.innerHTML=list.map(n=>`
-
-<div class="item ${!n.read?"unread":""}">
-
-<h3>${n.read?"":"🔴 "}${n.title||"දැනුම්දීම"}</h3>
-
-<p>${n.message||""}</p>
-
-<p class="small">
-${new Date(n.createdAt||Date.now()).toLocaleString("si-LK")}
-</p>
-
-${!n.read?`
-<button class="btn secondary" onclick="markNotificationRead('${n.id}')">
-✅ කියවූ ලෙස සලකුණු කරන්න
-</button>
-`:"<span class='tag'>කියවා ඇත</span>"}
-
-</div>
-
-`).join("");
+renderNotificationList(list);
 
 }catch(error){
 
@@ -414,6 +453,7 @@ container.innerHTML="❌ දැනුම්දීම් ලබාගැනීම
 
 };
 
+/* MARK ONE READ */
 
 window.markNotificationRead=async function(id){
 
@@ -430,8 +470,6 @@ if(snap.data().userUid!==auth.currentUser.uid)return;
 
 await updateDoc(ref,{read:true});
 
-loadNotifications();
-
 }catch(error){
 
 alert("❌ "+error.message);
@@ -440,6 +478,7 @@ alert("❌ "+error.message);
 
 };
 
+/* MARK ALL READ */
 
 window.markAllNotificationsRead=async function(){
 
@@ -467,8 +506,6 @@ doc(db,"notifications",item.id),
 
 }
 
-loadNotifications();
-
 }catch(error){
 
 alert("❌ "+error.message);
@@ -476,7 +513,6 @@ alert("❌ "+error.message);
 }
 
 };
-
 
 /* REGISTER */
 
@@ -498,7 +534,6 @@ document.getElementById("authMessage").innerText="❌ "+error.message;
 }
 
 };
-
 
 /* LOGIN */
 
@@ -523,7 +558,6 @@ document.getElementById("authMessage").innerText="❌ "+error.message;
 
 };
 
-
 /* LOGOUT */
 
 window.logoutUser=async function(){
@@ -543,7 +577,6 @@ document.getElementById("authMessage").innerText="❌ "+error.message;
 }
 
 };
-
 
 /* PASSWORD RESET */
 
@@ -574,7 +607,6 @@ alert("❌ Email යැවීමට නොහැකි වුණා: "+error.mes
 
 };
 
-
 /* AUTH STATE */
 
 onAuthStateChanged(auth,user=>{
@@ -587,10 +619,12 @@ if(user){
 ordersNav.classList.remove("hidden");
 notificationsNav.classList.remove("hidden");
 
+startRealtimeNotifications();
 loadMyProfile();
-loadNotifications();
 
 }else{
+
+stopRealtimeNotifications();
 
 ordersNav.classList.add("hidden");
 notificationsNav.classList.add("hidden");
@@ -635,7 +669,6 @@ showPage("home");
 
 });
 
-
 /* PAGE NAVIGATION */
 
 window.showPage=function(page){
@@ -668,14 +701,12 @@ if(page==="notifications")loadNotifications();
 
 };
 
-
 window.filterVegetable=function(veg){
 
 document.getElementById("search").value=veg;
 showPage("market");
 
 };
-
 
 /* FARMER PROFILE */
 
@@ -736,7 +767,6 @@ status.innerText="❌ Profile ලබාගැනීමට නොහැකි ව
 
 };
 
-
 document.getElementById("profilePhoto").addEventListener("change",function(){
 
 const file=this.files[0];
@@ -750,7 +780,6 @@ preview.classList.remove("hidden");
 }
 
 });
-
 
 window.saveFarmerProfile=async function(){
 
@@ -793,7 +822,6 @@ alert("❌ Profile එක සුරැකීමට නොහැකි වුණ�
 }
 
 };
-
 
 /* VIEW FARMER PROFILE */
 
@@ -874,7 +902,6 @@ box.innerHTML="❌ Profile ලබාගැනීමට නොහැකි වු
 
 };
 
-
 /* ADD PRODUCT */
 
 window.addProduct=async function(){
@@ -934,13 +961,11 @@ alert("❌ දැන්වීම පළ කිරීමට නොහැකි �
 
 };
 
-
 /* MARKET */
 
 window.renderProducts=async function(){
 
 const container=document.getElementById("products");
-
 container.innerHTML='<div class="card">⏳ දැන්වීම් ලබාගනිමින්...</div>';
 
 try{
@@ -964,10 +989,8 @@ else if(sort==="high")list.sort((a,b)=>(b.price||0)-(a.price||0));
 else list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
 
 if(!list.length){
-
 container.innerHTML='<div class="card">දැනට දැන්වීම් නැහැ. අලුත් අස්වැන්නක් පළ කරන්න 🌱</div>';
 return;
-
 }
 
 container.innerHTML=list.map(p=>`
@@ -1015,13 +1038,11 @@ ${auth.currentUser&&p.ownerUid===auth.currentUser.uid?`
 }catch(error){
 
 console.error(error);
-
 container.innerHTML='<div class="card">❌ දැන්වීම් ලබාගැනීමට නොහැකි වුණා. Firebase පරීක්ෂා කරන්න.</div>';
 
 }
 
 };
-
 
 /* MY ADS */
 
@@ -1104,7 +1125,6 @@ container.innerHTML="<p>❌ දැන්වීම් ලබාගැනීමට
 
 };
 
-
 /* STOCK */
 
 window.sellStock=async function(id){
@@ -1151,7 +1171,7 @@ sold:remaining<=0
 
 });
 
-alert("✅ විකිණීම සාර්ථකයි! තොගය යාවත්කාලීන කළා.");
+alert("✅ විකිණීම සාර්ථකයි! තොගය යාවත්කාලීන කළා!");
 
 renderMyAds();
 renderProducts();
@@ -1164,6 +1184,7 @@ alert("❌ "+error.message);
 
 };
 
+/* SOLD STATUS */
 
 window.toggleSold=async function(id,sold){
 
@@ -1193,7 +1214,6 @@ alert("❌ "+error.message);
 }
 
 };
-
 
 /* EDIT PRODUCT */
 
@@ -1269,7 +1289,6 @@ alert("❌ වෙනස් කිරීමට නොහැකි වුණා: "
 
 };
 
-
 /* DELETE PRODUCT */
 
 window.deleteProduct=async function(id){
@@ -1308,8 +1327,7 @@ alert("❌ ඉවත් කිරීමට නොහැකි වුණා: "+er
 
 };
 
-
-/* ONLINE ORDER SYSTEM */
+/* ONLINE ORDER */
 
 window.placeOrder=async function(productId){
 
@@ -1366,27 +1384,21 @@ const confirmOrder=confirm(
 if(!confirmOrder)return;
 
 const newOrder=await addDoc(collection(db,"orders"),{
-
 buyerUid:auth.currentUser.uid,
 buyerEmail:auth.currentUser.email||"",
 buyerPhone:phone.trim(),
-
 farmerUid:p.ownerUid,
 farmerName:p.farmer||"",
-
 productId:productId,
 veg:p.veg||"",
 price:Number(p.price),
 qty:qty,
 buyerTotal:total,
 loc:p.loc||"",
-
 status:"pending",
 createdAt:Date.now()
-
 });
 
-// ගොවියාට අලුත් Order එක ගැන දැනුම්දීම
 await createNotification(
 p.ownerUid,
 "🛒 අලුත් ඇණවුමක් ලැබුණා!",
@@ -1395,7 +1407,6 @@ newOrder.id
 );
 
 alert("✅ ඔබගේ Order එක සාර්ථකව යැව්වා!");
-
 showPage("orders");
 
 }catch(error){
@@ -1405,7 +1416,6 @@ alert("❌ Order එක යැවීමට නොහැකි වුණා: "+er
 }
 
 };
-
 
 /* LOAD ORDERS */
 
@@ -1512,13 +1522,11 @@ ${isBuyer&&o.status==="pending"?`
 }catch(error){
 
 console.error(error);
-
 container.innerHTML="<p>❌ Orders ලබාගැනීමට නොහැකි වුණා: "+error.message+"</p>";
 
 }
 
 };
-
 
 /* ACCEPT / REJECT / COMPLETE ORDER */
 
@@ -1574,7 +1582,6 @@ qty:remaining,
 sold:remaining<=0
 });
 
-// Firestore Rules අනුව status පමණක් වෙනස් කරයි
 transaction.update(orderRef,{
 status:"accepted"
 });
@@ -1601,14 +1608,12 @@ if(newStatus==="completed"&&order.status!=="accepted"){
 throw new Error("පිළිගත් Order එකක් පමණක් අවසන් කළ හැක.");
 }
 
-// Firestore Rules අනුව status පමණක් වෙනස් කරයි
 await updateDoc(orderRef,{
 status:newStatus
 });
 
 }
 
-// Order යාවත්කාලීන වූ පසු ගැනුම්කරුට දැනුම්දීම
 const latestOrderSnap=await getDoc(orderRef);
 
 if(latestOrderSnap.exists()){
@@ -1656,8 +1661,7 @@ alert("❌ "+error.message);
 
 };
 
-
-/* BUYER CANCEL ORDER */
+/* BUYER CANCEL */
 
 window.cancelOrder=async function(orderId){
 
@@ -1687,7 +1691,6 @@ return;
 await deleteDoc(ref);
 
 alert("✅ Order එක අවලංගු කළා!");
-
 loadOrders();
 
 }catch(error){
@@ -1697,7 +1700,6 @@ alert("❌ "+error.message);
 }
 
 };
-
 
 /* TRANSPORT */
 
@@ -1756,7 +1758,6 @@ alert("❌ "+error.message);
 }
 
 };
-
 
 /* LOAD TRANSPORT REQUESTS */
 
@@ -1827,13 +1828,11 @@ searchTransport();
 }catch(error){
 
 console.error(error);
-
 container.innerHTML="<p>❌ ඉල්ලීම් ලබාගැනීමට නොහැකි වුණා: "+error.message+"</p>";
 
 }
 
 };
-
 
 /* UPDATE TRANSPORT STATUS */
 
@@ -1867,7 +1866,6 @@ alert("❌ "+error.message);
 
 };
 
-
 /* SEARCH TRANSPORT */
 
 window.searchTransport=function(){
@@ -1881,7 +1879,6 @@ card.style.display=card.innerText.toLowerCase().includes(search)?"":"none";
 });
 
 };
-
 
 /* DELETE TRANSPORT REQUEST */
 
@@ -1906,7 +1903,6 @@ return;
 await deleteDoc(ref);
 
 alert("✅ ඉල්ලීම ඉවත් කළා!");
-
 loadTransportRequests();
 
 }catch(error){
