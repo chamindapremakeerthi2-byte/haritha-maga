@@ -540,9 +540,9 @@ let container=document.getElementById("products");
 container.innerHTML='<div class="card">⏳ දැන්වීම් ලබාගනිමින්...</div>';
 
 try{
-const snapshot=await getDocs(productsRef);
-let list=snapshot.docs.map(d=>({id:d.id,...d.data()}));
-
+let list=snapshot.docs
+.map(d=>({id:d.id,...d.data()}))
+.filter(p=>!p.sold);
 let search=(document.getElementById("search")?.value||"").toLowerCase();
 
 list=list.filter(p=>
