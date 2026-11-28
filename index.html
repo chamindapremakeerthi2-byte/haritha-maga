@@ -661,7 +661,7 @@ return;
 }
 
 box.innerHTML=list.map(n=>`
-<div class="notificationItem ${n.read?"notificationRead":"notificationUnread"}">
+<div class="notificationItem ${n.read?"notificationRead":"notificationUnread"}>
 <h3>${n.title||"🔔 දැනුම්දීම"}</h3>
 <p>${n.message||""}</p>
 <p class="notificationTime">${n.createdAt?new Date(n.createdAt).toLocaleString("si-LK"):""}</p>
@@ -976,3 +976,7 @@ loadTransportRequests();
 alert("❌ "+error.message);
 }
 };
+
+</script>
+</body>
+</html>
