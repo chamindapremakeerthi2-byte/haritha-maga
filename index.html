@@ -290,7 +290,7 @@ measurementId:"G-B1T94LD7QV"
 
 const app=initializeApp(firebaseConfig),db=getFirestore(app),auth=getAuth(app);
 const messaging=getMessaging(app);
-const VAPID_KEY="BKq93Gk0YWl?"; 
+const VAPID_KEY="BKq93Gk0YWxgWhclk5AKLa-dOQDuMotuSpU-cMg7M62hYACvlGU6l_QJDENMrx-TVfgvUYnbDmRAHFnwrramVTk?"; 
 const productsRef=collection(db,"products"),
 profilesRef=collection(db,"farmerProfiles"),
 ordersRef=collection(db,"orders");
@@ -619,11 +619,20 @@ box.innerHTML="❌ Orders ලබාගැනීමට නොහැකි වු�
 }
 };
 
+
 /* DASHBOARD CLICK FILTER */
 window.openOrdersFilter=async function(filter){
-window.openOrdersFilter=async function(filter){
+
+const pages=["home","sell","market","orders","transport","account","profile","myAds"];
+
+pages.forEach(id=>{
+document.getElementById(id).classList.add("hidden");
+});
+
+document.getElementById("orders").classList.remove("hidden");
+
 await loadOrders();
-showPage("orders");
+
 renderOrdersList(filter);
 
 const titles={
@@ -634,9 +643,16 @@ completed:"✅ Completed Orders"
 };
 
 const box=document.getElementById("ordersList");
+
 if(box){
-box.insertAdjacentHTML("afterbegin",`<h3>${titles[filter]||"Orders"}</h3>`);
+box.insertAdjacentHTML(
+"afterbegin",
+`<h3>${titles[filter]||"Orders"}</h3>`
+);
 }
+
+loadNotifications();
+
 };
 
 
