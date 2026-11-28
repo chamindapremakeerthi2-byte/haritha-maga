@@ -542,20 +542,102 @@ alert("✅ Order Request එක යැව්වා!");showPage("orders");
 }catch(e){alert("❌ "+e.message)}
 };
 
-/* ORDERS */
+
+/* ORDERS FILTER SYSTEM */
+let cachedOrders=[];
+
+window.renderOrdersList=function(filter="all"){
+const box=document.getElementById("ordersList");
+if(!box)return;
+
+let list=[...cachedOrders];
+
+if(filter==="pending"){
+list=list.filter(o=>o.status==="pending");
+}
+else if(filter==="completed"){
+list=list.filter(o=>o.status==="completed");
+}
+else if(filter==="today"){
+const start=new Date();
+start.setHours(0,0,0,0);
+const end=new Date();
+end.setHours(23,59,59,999);
+
+list=list.filter(o=>{
+const t=new Date(o.createdAt||0);
+return t>=start&&t<=end;
+});
+}
+
+list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+if(!list.length){
+box.innerHTML="<p>📭 මේ වර්ගයට අදාළ Orders නැහැ.</p>";
+return;
+}
+
+box.innerHTML=list.map(o=>`<div class="item">
+<h3>🥬 ${o.veg||"එළවළු"} ${o.role==="buyer"?"— ඔබ යැවූ Order":"— ඔබට ලැබුණු Order"}</h3>
+<p>📦 ${o.qty} kg</p>
+<p>💰 රු. ${o.buyerTotal||0}</p>
+<p>📍 ${o.loc||""}</p>
+<p>📌 ${o.status==="pending"?"🟡 Pending":o.status==="accepted"?"🟢 Accepted":o.status==="rejected"?"🔴 Rejected":"✅ Completed"}</p>
+${o.role==="farmer"&&o.status==="pending"?`<button class="btn" onclick="respondOrder('${o.id}','accepted')">✅ Accept</button><button class="btn danger" onclick="respondOrder('${o.id}','rejected')">❌ Reject</button>`:""}
+${o.role==="farmer"&&o.status==="accepted"?`<button class="btn secondary" onclick="respondOrder('${o.id}','completed')">📦 Complete Order</button>`:""}
+${o.role==="farmer"?`<p>📞 Buyer: ${o.buyerPhone||""}</p><a href="tel:${o.buyerPhone||""}"><button class="btn secondary">📞 Buyer අමතන්න</button></a>`:""}
+${o.role==="buyer"&&o.status==="pending"?`<button class="btn danger" onclick="deleteOrder('${o.id}')">🗑️ Cancel Order</button>`:""}
+${o.status==="completed"?`<button class="btn danger" onclick="deleteCompletedOrder('${o.id}')">🗑️ Completed Order ඉවත් කරන්න</button>`:""}
+</div>`).join("");
+};
+
 window.loadOrders=async function(){
 const box=document.getElementById("ordersList");
-if(!auth.currentUser){box.innerHTML="🔐 Login වෙන්න.";return}
+if(!auth.currentUser){
+box.innerHTML="🔐 Login වෙන්න.";
+return;
+}
+
 box.innerHTML="⏳ ලබාගනිමින්...";
+
 try{
-const bq=query(ordersRef,where("buyerUid","==",auth.currentUser.uid)),fq=query(ordersRef,where("farmerUid","==",auth.currentUser.uid));
+const bq=query(ordersRef,where("buyerUid","==",auth.currentUser.uid));
+const fq=query(ordersRef,where("farmerUid","==",auth.currentUser.uid));
+
 const [bs,fs]=await Promise.all([getDocs(bq),getDocs(fq)]);
-const map=new Map();bs.docs.forEach(d=>map.set(d.id,{id:d.id,...d.data(),role:"buyer"}));fs.docs.forEach(d=>map.set(d.id,{id:d.id,...d.data(),role:"farmer"}));
-const list=[...map.values()].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-if(!list.length){box.innerHTML="<p>දැනට Orders නැහැ.</p>";return}
-box.innerHTML=list.map(o=>`<div class="item"><h3>🥬 ${o.veg||"එළවළු"} ${o.role==="buyer"?"— ඔබ යැවූ Order":"— ඔබට ලැබුණු Order"}</h3><p>📦 ${o.qty} kg</p><p>💰 රු. ${o.buyerTotal||0}</p><p>📍 ${o.loc||""}</p><p>📌 ${o.status==="pending"?"🟡 Pending":o.status==="accepted"?"🟢 Accepted":o.status==="rejected"?"🔴 Rejected":"✅ Completed"}</p>${o.role==="farmer"&&o.status==="pending"?`<button class="btn" onclick="respondOrder('${o.id}','accepted')">✅ Accept</button><button class="btn danger" onclick="respondOrder('${o.id}','rejected')">❌ Reject</button>`:""}${o.role==="farmer"&&o.status==="accepted"?`<button class="btn secondary" onclick="respondOrder('${o.id}','completed')">📦 Complete Order</button>`:""}${o.role==="farmer"?`<p>📞 Buyer: ${o.buyerPhone||""}</p><a href="tel:${o.buyerPhone||""}"><button class="btn secondary">📞 Buyer අමතන්න</button></a>`:""}${o.role==="buyer"&&o.status==="pending"?`<button class="btn danger" onclick="deleteOrder('${o.id}')">🗑️ Cancel Order</button>`:""}${o.status==="completed"?`<button class="btn danger" onclick="deleteCompletedOrder('${o.id}')">🗑️ Completed Order ඉවත් කරන්න</button>`:""}</div>`).join("");
-}catch(e){box.innerHTML="❌ Orders ලබාගැනීමට නොහැකි වුණා: "+e.message}
+
+const map=new Map();
+bs.docs.forEach(d=>map.set(d.id,{id:d.id,...d.data(),role:"buyer"}));
+fs.docs.forEach(d=>map.set(d.id,{id:d.id,...d.data(),role:"farmer"}));
+
+cachedOrders=[...map.values()].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+renderOrdersList("all");
+
+}catch(e){
+box.innerHTML="❌ Orders ලබාගැනීමට නොහැකි වුණා: "+e.message;
+}
 };
+
+/* DASHBOARD CLICK FILTER */
+window.openOrdersFilter=async function(filter){
+showPage("orders");
+await loadOrders();
+renderOrdersList(filter);
+
+const titles={
+all:"🛒 සියලුම Orders",
+pending:"⏳ Pending Orders",
+today:"📅 අද Orders",
+completed:"✅ Completed Orders"
+};
+
+const box=document.getElementById("ordersList");
+if(box){
+box.insertAdjacentHTML("afterbegin",`<h3>${titles[filter]||"Orders"}</h3>`);
+}
+};
+
 
 /* NOTIFICATIONS */
 window.loadNotifications=async function(){
