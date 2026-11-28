@@ -692,40 +692,95 @@ return;
 }
 try{
 const orderRef=doc(db,"orders",orderId);
+let orderData;
+
 if(newStatus==="accepted"){
 await runTransaction(db,async tx=>{
 const orderSnap=await tx.get(orderRef);
 if(!orderSnap.exists())throw new Error("Order එක සොයාගත නොහැක.");
 const o=orderSnap.data();
+orderData=o;
+
 if(o.farmerUid!==auth.currentUser.uid)throw new Error("මෙම Order එක ඔබට අදාළ නැහැ.");
 if(o.status!=="pending")throw new Error("මෙම Order එක දැනටමත් වෙනස් කර ඇත.");
+
 const productRef=doc(db,"products",o.productId),productSnap=await tx.get(productRef);
 if(!productSnap.exists())throw new Error("අස්වැන්න දැන්වීම ඉවත් කර ඇත.");
+
 const p=productSnap.data();
 if(p.ownerUid!==auth.currentUser.uid)throw new Error("මෙම දැන්වීම ඔබට අයිති නැහැ.");
+
 const currentQty=Number(p.qty||0),orderedQty=Number(o.qty||0);
-if(p.sold||orderedQty<=0||orderedQty>currentQty)throw new Error("ප්‍රමාණවත් තොගයක් නැහැ. දැනට ඉතිරිව ඇත්තේ "+currentQty+" kg.");
+if(p.sold||orderedQty<=0||orderedQty>currentQty)
+throw new Error("ප්‍රමාණවත් තොගයක් නැහැ. දැනට ඉතිරිව ඇත්තේ "+currentQty+" kg.");
+
 const remaining=currentQty-orderedQty;
 tx.update(productRef,{qty:remaining,sold:remaining<=0});
 tx.update(orderRef,{status:"accepted"});
 });
+
 alert("✅ Order එක පිළිගත්තා. තොගය අඩු කළා!");
+
 }else{
+
 const snap=await getDoc(orderRef);
 if(!snap.exists())return;
-if(snap.data().farmerUid!==auth.currentUser.uid){
+
+orderData=snap.data();
+
+if(orderData.farmerUid!==auth.currentUser.uid){
 alert("මෙම Order එක ඔබට අදාළ නැහැ.");
 return;
 }
+
 if(!["rejected","completed"].includes(newStatus))return;
-if(newStatus==="rejected"&&snap.data().status!=="pending")throw new Error("Pending Order පමණක් ප්‍රතික්ෂේප කළ හැක.");
-if(newStatus==="completed"&&snap.data().status!=="accepted")throw new Error("පිළිගත් Order පමණක් අවසන් කළ හැක.");
+
+if(newStatus==="rejected"&&orderData.status!=="pending")
+throw new Error("Pending Order පමණක් ප්‍රතික්ෂේප කළ හැක.");
+
+if(newStatus==="completed"&&orderData.status!=="accepted")
+throw new Error("පිළිගත් Order පමණක් අවසන් කළ හැක.");
+
 await updateDoc(orderRef,{status:newStatus});
 alert("✅ Order තත්ත්වය යාවත්කාලීන කළා!");
 }
+
+/* BUYER NOTIFICATION */
+try{
+let title="",message="";
+
+if(newStatus==="accepted"){
+title="✅ ඔබගේ Order එක පිළිගෙන ඇත!";
+message=(orderData.veg||"එළවළු")+" සඳහා "+orderData.qty+" kg ඇණවුම ගොවියා පිළිගෙන ඇත.";
+}
+else if(newStatus==="rejected"){
+title="❌ ඔබගේ Order එක ප්‍රතික්ෂේප වුණා";
+message=(orderData.veg||"එළවළු")+" සඳහා වූ Order ඉල්ලීම ගොවියා ප්‍රතික්ෂේප කළා.";
+}
+else if(newStatus==="completed"){
+title="📦 ඔබගේ Order එක අවසන්";
+message=(orderData.veg||"එළවළු")+" සඳහා වූ Order එක අවසන් කර ඇත.";
+}
+
+if(orderData.buyerUid){
+await addDoc(collection(db,"notifications"),{
+userUid:orderData.buyerUid,
+title:title,
+message:message,
+orderId:orderId,
+read:false,
+createdAt:Date.now()
+});
+}
+}catch(notificationError){
+console.log("Buyer notification failed:",notificationError);
+}
+
+/* REFRESH */
 loadOrders();
 renderMyAds();
 renderProducts();
+
 }catch(error){
 alert("❌ "+error.message);
 }
