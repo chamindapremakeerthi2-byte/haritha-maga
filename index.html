@@ -311,16 +311,77 @@ ${auth.currentUser&&p.ownerUid===auth.currentUser.uid?`<button class="btn second
 
 /* ORDER REQUESTS */
 window.placeOrder=async function(productId){
-if(!auth.currentUser){alert("Order එකක් යැවීමට පළමුව Login වෙන්න.");showPage("account");return;}
-try{const snap=await getDoc(doc(db,"products",productId));if(!snap.exists()){alert("මෙම දැන්වීම සොයාගත නොහැක.");return;}
-const p=snap.data();if(p.ownerUid===auth.currentUser.uid){alert("ඔබගේම දැන්වීමට Order කරන්න බැහැ.");return;}
-if(p.sold||Number(p.qty)<=0){alert("මෙම අස්වැන්න විකිණී අවසන්.");return;}
-const qty=Number(prompt(`අවශ්‍ය ප්‍රමාණය (kg). ඉතිරි තොගය ${p.qty} kg`, "1"));if(!qty||qty<=0||qty>Number(p.qty)){alert("ප්‍රමාණය නිවැරදිව ඇතුළත් කරන්න. ඉතිරි තොගය: "+p.qty+" kg");return;}
-const buyerPhone=prompt("ඔබගේ දුරකථන අංකය ඇතුළත් කරන්න:");if(!buyerPhone||!buyerPhone.trim()){alert("දුරකථන අංකය අවශ්‍යයි.");return;}
-await addDoc(ordersRef,{buyerUid:auth.currentUser.uid,buyerEmail:auth.currentUser.email||"",buyerPhone:buyerPhone.trim(),farmerUid:p.ownerUid,farmerName:p.farmer||"",productId,veg:p.veg||"",price:Number(p.price)||0,qty,buyerTotal:qty*(Number(p.price)||0),loc:p.loc||"",status:"pending",createdAt:Date.now()});
-alert("✅ Order Request එක ගොවියාට යැව්වා!");showPage("orders");
-}catch(error){alert("❌ Order එක යැවීමට නොහැකි වුණා: "+error.message);}
+if(!auth.currentUser){
+alert("Order එකක් යැවීමට පළමුව Login වෙන්න.");
+showPage("account");
+return;
+}
+try{
+const snap=await getDoc(doc(db,"products",productId));
+if(!snap.exists()){
+alert("මෙම දැන්වීම සොයාගත නොහැක.");
+return;
+}
+const p=snap.data();
+if(p.ownerUid===auth.currentUser.uid){
+alert("ඔබගේම දැන්වීමට Order කරන්න බැහැ.");
+return;
+}
+if(p.sold||Number(p.qty)<=0){
+alert("මෙම අස්වැන්න විකිණී අවසන්.");
+return;
+}
+const qty=Number(prompt("අවශ්‍ය ප්‍රමාණය (kg). ඉතිරි තොගය ${p.qty} kg","1"));
+if(!qty||qty<=0||qty>Number(p.qty)){
+alert("ප්‍රමාණය නිවැරදිව ඇතුළත් කරන්න. ඉතිරි තොගය: "+p.qty+" kg");
+return;
+}
+const buyerPhone=prompt("ඔබගේ දුරකථන අංකය ඇතුළත් කරන්න:");
+if(!buyerPhone||!buyerPhone.trim()){
+alert("දුරකථන අංකය අවශ්‍යයි.");
+return;
+}
+
+// 1. Order එක save කිරීම
+const orderRef=await addDoc(ordersRef,{
+buyerUid:auth.currentUser.uid,
+buyerEmail:auth.currentUser.email||"",
+buyerPhone:buyerPhone.trim(),
+farmerUid:p.ownerUid,
+farmerName:p.farmer||"",
+productId,
+veg:p.veg||"",
+price:Number(p.price)||0,
+qty,
+buyerTotal:qty*(Number(p.price)||0),
+loc:p.loc||"",
+status:"pending",
+createdAt:Date.now()
+});
+
+// 2. ගොවියාට Notification එක save කිරීම
+try{
+await addDoc(collection(db,"notifications"),{
+userUid:p.ownerUid,
+title:"🛒 අලුත් ඇණවුමක් ලැබුණා!",
+message:"${p.veg||"එළවළු"} සඳහා ${qty} kg ඇණවුමක් ලැබී ඇත.",
+orderId:orderRef.id,
+read:false,
+createdAt:Date.now()
+});
+}catch(notificationError){
+console.error("Notification save error:",notificationError);
+}
+
+// 3. සාර්ථක පණිවිඩය
+alert("✅ Order Request එක ගොවියාට යැව්වා!");
+showPage("orders");
+
+}catch(error){
+alert("❌ Order එක යැවීමට නොහැකි වුණා: "+error.message);
+}
 };
+  
 window.loadOrders=async function(){
 const box=document.getElementById("ordersList");if(!auth.currentUser){box.innerHTML='🔐 Orders බැලීමට Login වෙන්න.<button class="btn" onclick="showPage(\'account\')">Login වෙන්න</button>';return;}
 box.innerHTML="⏳ Orders ලබාගනිමින්...";
