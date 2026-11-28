@@ -93,17 +93,47 @@ footer{text-align:center;color:#819082;font-size:12px;padding:20px}
 
 <!-- HOME ORDER DASHBOARD -->
 <div class="card" id="homeOrderDashboard">
+
 <h2>📊 මගේ Order Dashboard</h2>
+
 <div class="dashboardGrid">
-<div class="dashboardBox"><strong id="dashTotal">0</strong><span>🛒 මුළු Orders</span></div>
-<div class="dashboardBox pendingBox"><strong id="dashPending">0</strong><span>⏳ Pending</span></div>
-<div class="dashboardBox todayBox"><strong id="dashToday">0</strong><span>📅 අද Orders</span></div>
-<div class="dashboardBox completedBox"><strong id="dashCompleted">0</strong><span>✅ Completed</span></div>
+
+<div class="dashboardBox" onclick="openOrdersFilter('all')">
+<strong id="dashTotal">0</strong>
+<span>🛒 මුළු Orders</span>
 </div>
+
+<div class="dashboardBox pendingBox" onclick="openOrdersFilter('pending')">
+<strong id="dashPending">0</strong>
+<span>⏳ Pending</span>
+</div>
+
+<div class="dashboardBox todayBox" onclick="openOrdersFilter('today')">
+<strong id="dashToday">0</strong>
+<span>📅 අද Orders</span>
+</div>
+
+<div class="dashboardBox completedBox" onclick="openOrdersFilter('completed')">
+<strong id="dashCompleted">0</strong>
+<span>✅ Completed</span>
+</div>
+
+</div>
+
 <h3>🧾 අලුත්ම Orders</h3>
-<div id="homeRecentOrders">Login වී ඔබගේ Orders බලන්න.</div>
-<button class="btn secondary" onclick="showPage('orders')">📦 සියලුම Orders බලන්න</button>
-<button class="btn secondary" onclick="loadHomeDashboard()">🔄 Dashboard යාවත්කාලීන කරන්න</button>
+
+<div id="homeRecentOrders">
+Login වී ඔබගේ Orders බලන්න.
+</div>
+
+<button class="btn secondary" onclick="showPage('orders')">
+📦 සියලුම Orders බලන්න
+</button>
+
+<button class="btn secondary" onclick="loadHomeDashboard()">
+🔄 Dashboard යාවත්කාලීන කරන්න
+</button>
+
 </div>
 
 <div class="card">
