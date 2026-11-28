@@ -621,8 +621,9 @@ box.innerHTML="❌ Orders ලබාගැනීමට නොහැකි වු�
 
 /* DASHBOARD CLICK FILTER */
 window.openOrdersFilter=async function(filter){
-showPage("orders");
+window.openOrdersFilter=async function(filter){
 await loadOrders();
+showPage("orders");
 renderOrdersList(filter);
 
 const titles={
