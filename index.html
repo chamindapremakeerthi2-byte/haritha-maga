@@ -416,16 +416,57 @@ box.innerHTML=`${photo}<div class="profileName">${p.name||"ගොවියා"}<
 
 /* ADD PRODUCT */
 window.addProduct=async function(){
-if(!auth.currentUser){alert("Login වෙන්න.");showPage("account");return}
-const farmer=document.getElementById("farmer").value.trim(),phone=document.getElementById("phone").value.trim(),veg=vegetable.value,qty=Number(quantity.value),price=Number(document.getElementById("price").value),loc=location.value.trim(),photo=document.getElementById("photo").files[0],available=document.getElementById("available").value;
-if(!farmer||!phone||!veg||qty<=0||price<=0||!loc){alert("සියලු තොරතුරු ඇතුළත් කරන්න.");return}
+if(!auth.currentUser){
+alert("Login වෙන්න.");
+showPage("account");
+return;
+}
+
+const farmer=document.getElementById("farmer").value.trim();
+const phone=document.getElementById("phone").value.trim();
+const veg=document.getElementById("vegetable").value;
+const qty=Number(document.getElementById("quantity").value);
+const price=Number(document.getElementById("price").value);
+const loc=document.getElementById("location").value.trim();
+const photo=document.getElementById("photo").files[0];
+const available=document.getElementById("available").value;
+
+if(!farmer||!phone||!veg||qty<=0||price<=0||!loc){
+alert("සියලු තොරතුරු ඇතුළත් කරන්න.");
+return;
+}
+
 try{
 const photoURL=await uploadPhoto(photo);
-await addDoc(productsRef,{farmer,ownerUid:auth.currentUser.uid,phone,veg,qty,initialQty:qty,price,loc,photo:photoURL,available,sold:false,createdAt:Date.now()});
+
+await addDoc(productsRef,{
+farmer,
+ownerUid:auth.currentUser.uid,
+phone,
+veg,
+qty,
+initialQty:qty,
+price,
+loc,
+photo:photoURL,
+available,
+sold:false,
+createdAt:Date.now()
+});
+
 alert("✅ දැන්වීම පළ කළා!");
-["farmer","phone","vegetable","quantity","price","location","photo","available"].forEach(id=>document.getElementById(id).value="");
+
+["farmer","phone","vegetable","quantity","price","location","available"].forEach(id=>{
+document.getElementById(id).value="";
+});
+
+document.getElementById("photo").value="";
+
 showPage("market");
-}catch(e){alert("❌ "+e.message)}
+
+}catch(e){
+alert("❌ "+e.message);
+}
 };
 
 /* MARKET */
